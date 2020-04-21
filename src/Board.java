@@ -7,12 +7,16 @@ public class Board {
     */
 
     private char[][] board;
-    private int p1_x_pos = 0;
-    private int p1_y_pos = 0;
-    private int p2_x_pos = 7;
-    private int p2_y_pos = 7;
+
+    private Player player1;
+    private Player player2;
+
 
     public Board(){
+
+        player1 = new Player(0,0);
+        player2 = new Player(7,7);
+
         board = new char[][]{
                 {'X', '-', '-', '-', '-', '-', '-', '-'},
                 {'-', '-', '-', '-', '-', '-', '-', '-'},
@@ -25,36 +29,38 @@ public class Board {
     }
 
     //update board based on player's new position
-    public void updateBoard(int new_x, int new_y, int player){
-        if(player == 1){
-            board[p1_x_pos][p1_y_pos] = '#';
-            p1_x_pos = new_x - 1;
-            p1_y_pos = new_y - 1;
-            board[p1_x_pos][p1_y_pos] = 'X';
+    public void updateBoard(int new_x, int new_y, Player player){
+        if(player == player1){
+            board[player1.getXPosition()][player1.getYPosition()] = '#';
+            player1.setXPosition(new_x - 1);
+            player1.setYPosition(new_y - 1);
+            board[player1.getXPosition()][player1.getYPosition()] = 'X';
         }
         else{
-            board[p2_x_pos][p2_y_pos] = '#';
-            p2_x_pos = new_x - 1;
-            p2_y_pos = new_y - 1;
-            board[p1_x_pos][p1_y_pos] = 'O';
+            board[player2.getXPosition()][player2.getYPosition()] = '#';
+            player2.setXPosition(new_x - 1);
+            player2.setYPosition(new_y - 1);
+            board[player2.getXPosition()][player2.getYPosition()] = 'O';
         }
     }
 
-    //legal move check
-    public boolean check(int player, int m_x, int m_y){
 
-        int p_x = 0, p_y = 0;
+
+    //legal move check
+    public boolean isValidMove(Player player, int m_x, int m_y){
+
+        int p_x, p_y;
         m_x--;
         m_y--;
 
-        if(player == 1){
-            p_x = p1_x_pos;
-            p_y = p1_y_pos;
+        if(player == player1){
+            p_x = player1.getXPosition();
+            p_y = player1.getYPosition();
         }
 
         else{
-            p_x = p2_x_pos;
-            p_y = p2_y_pos;
+            p_x = player2.getXPosition();
+            p_y = player2.getYPosition();
         }
 
         //user input verification should be done in the main class
@@ -165,9 +171,11 @@ public class Board {
         Board a = new Board();
         System.out.println(a);
 
-        if(a.check(1, 5,5))
-            a.updateBoard(5, 5,1);
+        if(a.isValidMove(a.player1, 5,5))
+            a.updateBoard(5, 5,a.player1);
 
+
+        System.out.println();
         System.out.println(a);
 
     }
