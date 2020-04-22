@@ -8,8 +8,8 @@ public class Board {
 
     private char[][] board;
 
-    private Player player1;
-    private Player player2;
+    Player player1;
+    Player player2;
 
 
     public Board(){
@@ -67,7 +67,7 @@ public class Board {
             p_y = player2.getYPosition();
         }
 
-        //user input verification should be done in the main class
+        //user input verification should be done in the Isolation class
         if(Math.abs(m_x - p_y) != Math.abs((m_y - p_y))){
             return false;
         }
@@ -169,19 +169,5 @@ public class Board {
             }
         }
         return board;
-    }
-
-    public static void main(String args[]){
-        Board a = new Board();
-        System.out.println(a);
-        Move move = new Move(5,5);
-
-        if(a.isValidMove(a.player1, move))
-            a.updateBoard(a.player1, move);
-
-
-        System.out.println();
-        System.out.println(a);
-
     }
 }
