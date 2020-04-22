@@ -29,17 +29,17 @@ public class Board {
     }
 
     //update board based on player's new position
-    public void updateBoard(int new_x, int new_y, Player player){
+    public void updateBoard(Player player, Move move){
         if(player == player1){
             board[player1.getXPosition()][player1.getYPosition()] = '#';
-            player1.setXPosition(new_x - 1);
-            player1.setYPosition(new_y - 1);
+            player1.setXPosition(move.getX() - 1);
+            player1.setYPosition(move.getY() - 1);
             board[player1.getXPosition()][player1.getYPosition()] = 'X';
         }
         else{
             board[player2.getXPosition()][player2.getYPosition()] = '#';
-            player2.setXPosition(new_x - 1);
-            player2.setYPosition(new_y - 1);
+            player2.setXPosition(move.getX() - 1);
+            player2.setYPosition(move.getY() - 1);
             board[player2.getXPosition()][player2.getYPosition()] = 'O';
         }
     }
@@ -47,9 +47,13 @@ public class Board {
 
 
     //legal move check
-    public boolean isValidMove(Player player, int m_x, int m_y){
+    public boolean isValidMove(Player player, Move move){
 
         int p_x, p_y;
+
+        int m_x = move.getX();
+        int m_y = move.getY();
+
         m_x--;
         m_y--;
 
@@ -157,9 +161,9 @@ public class Board {
 
     //prints board
     public String toString(){
-        String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8";
+        String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8   Computer vs. Opponent";
         for(int i = 0; i < 8; i++){
-            board += ("\n" + Character.toString((char) (65 + i)) + " ");
+            board += ("\n" + (char)(65 + i)) + " ";
             for(int j = 0; j < 8; j++){
                 board += ("| " + this.board[i][j] + " ");
             }
@@ -170,9 +174,10 @@ public class Board {
     public static void main(String args[]){
         Board a = new Board();
         System.out.println(a);
+        Move move = new Move(5,5);
 
-        if(a.isValidMove(a.player1, 5,5))
-            a.updateBoard(5, 5,a.player1);
+        if(a.isValidMove(a.player1, move))
+            a.updateBoard(a.player1, move);
 
 
         System.out.println();

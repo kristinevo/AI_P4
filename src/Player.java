@@ -1,6 +1,5 @@
 public class Player {
 
-    private int playerID;
     private int playerXPosition;
     private int playerYPosition;
 
@@ -11,6 +10,7 @@ public class Player {
     }
 
     int getXPosition() {return playerXPosition;}
+
     int getYPosition() {return playerYPosition;}
 
 
