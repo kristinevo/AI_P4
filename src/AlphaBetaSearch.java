@@ -10,6 +10,7 @@ public class AlphaBetaSearch {
         this.curState = state;
     }
 
+    //Where Min-Max w/ alpha-beta pruning will be implemented
     Move search() {
         Move move = new Move(5,5);
 
