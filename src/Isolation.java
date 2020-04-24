@@ -33,8 +33,10 @@ public class Isolation{
                 System.exit(0);
             }
 
+            //confused here, why does AlphaBeta need a Board object if all it has in its constructor is the depth
             search = new AlphaBetaSearch(board);
-            aiMove = search.search();
+
+            aiMove = search.search(board);
             board.updateBoard(board.player1, aiMove);
             System.out.println(board);
             System.exit(0);

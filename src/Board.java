@@ -44,8 +44,6 @@ public class Board {
         }
     }
 
-
-
     //legal move check
     public boolean isValidMove(Player player, Move move){
 

@@ -4,6 +4,8 @@ public class Player {
     private int playerYPosition;
 
 
+    Player(){}
+
     Player(int xPosition, int yPosition) {
         playerXPosition = xPosition;
         playerYPosition = yPosition;
