@@ -7,14 +7,15 @@ public class Isolation{
     how to limit the time it takes for the agent to make a move.
      */
 
-    int secondsPassed = 0;
     Move aiMove;
     Board board;
     AlphaBetaSearch search;
+    Timer timer;
 
 
     Isolation() {
         board = new Board();
+        timer = new Timer();
     }
 
     /*
@@ -24,25 +25,31 @@ public class Isolation{
      */
     TimerTask task = new TimerTask() {
         public void run() {
-            secondsPassed++;
-            if(secondsPassed > 5) {
-                System.out.println("Took too long");
-                System.exit(-1);
-            } else {
-                search = new AlphaBetaSearch(board);
-                aiMove = search.search();
-                board.updateBoard(board.player1, aiMove);
-                System.out.println(board);
+
+            int test = 0;
+            if (test == 2) {
+                System.out.println("Found a solution!");
+                timer.cancel();
                 System.exit(0);
             }
+
+            search = new AlphaBetaSearch(board);
+            aiMove = search.search();
+            board.updateBoard(board.player1, aiMove);
+            System.out.println(board);
+            System.exit(0);
         }
     };
+
+    public void cancelTimer() {
+        this.timer.cancel();
+        System.out.println("Canceled Timer!");
+    }
 
 
     //Called in main to use the TimerTask
     public void getAiMove() {
         System.out.println(board);
-        Timer timer = new Timer();
         timer.schedule(task, 5*1000);  //This is where the 5 second timer is set
 
     }
