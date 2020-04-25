@@ -7,15 +7,17 @@ public class Isolation{
     how to limit the time it takes for the agent to make a move.
      */
 
-    Move aiMove;
     Board board;
-    AlphaBetaSearch search;
     Timer timer;
+    Agent ai;
+    Move aiMove;
+    Player player;
 
 
     Isolation() {
         board = new Board();
         timer = new Timer();
+        player = new Player();
     }
 
     /*
@@ -33,10 +35,10 @@ public class Isolation{
                 System.exit(0);
             }
 
-            //confused here, why does AlphaBeta need a Board object if all it has in its constructor is the depth
-            search = new AlphaBetaSearch(board);
+            //the turn is a place holder for now
+            ai = new Agent(1, player);
 
-            aiMove = search.search(board);
+            aiMove = ai.search(board);
             board.updateBoard(board.player1, aiMove);
             System.out.println(board);
             System.exit(0);

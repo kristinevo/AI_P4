@@ -28,6 +28,9 @@ public class Board {
                 {'-', '-', '-', '-', '-', '-', '-', 'O'}};
     }
 
+    public char[][] getBoard(){
+        return board;
+    }
     //update board based on player's new position
     public void updateBoard(Player player, Move move){
         if(player == player1){
@@ -65,8 +68,10 @@ public class Board {
             p_y = player2.getYPosition();
         }
 
-        //user input verification should be done in the Isolation class
-        if(Math.abs(m_x - p_y) != Math.abs((m_y - p_y))){
+        //check's user input
+        if(Math.abs(m_x - p_y) != Math.abs((m_y - p_y)) ||
+           move.getX() < 0     || move.getX() > 7       ||
+           move.getY() < 0     || move.getY() > 7       ){
             return false;
         }
 
