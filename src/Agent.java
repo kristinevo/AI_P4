@@ -42,12 +42,19 @@ public class Agent extends Player{
         return move;
     }*/
 
-    private double aplhaBetaSearch(Board state) {
+    private Move aplhaBetaSearch(Board state) {
         //TODO: planning on having the ai store it's next move here, it's a WIP
-        double v;
-        current_depth = 0;
-        v = maxValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
-        return v;
+        ArrayList<Move> successors = generateSuccessors(state);
+        double v, best_v = infinity;
+        double alpha = negativeInfinity;
+        for(Move i: successors) {
+            v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
+            if(v >= best_v){
+                ai_next_move = i;
+            }
+            alpha = Math.max(alpha, v);
+        }
+        return ai_next_move;
     }
 
     double maxValue(Board state, double alpha, double beta) {
@@ -59,6 +66,7 @@ public class Agent extends Player{
         if (terminalTest(state))
             return 0;
 
+        current_depth++;
         double value = negativeInfinity;
         ArrayList<Move> successors = generateSuccessors(state);
 
@@ -82,6 +90,7 @@ public class Agent extends Player{
         if (terminalTest(state))
             return 0;
 
+        current_depth++;
         double value = infinity;
         ArrayList<Move> successors = generateSuccessors(state);
 
