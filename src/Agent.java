@@ -3,7 +3,8 @@ import java.util.ArrayList;
 public class Agent extends Player{
 
     Player opponent;
-    private int MAX_DEPTH;
+    private int MAX_DEPTH = 3;
+    private int current_depth = 0;
     double infinity = Double.MAX_VALUE;
     double negativeInfinity = Double.MIN_VALUE;
     Move ai_next_move = new Move(0,0);
@@ -42,11 +43,19 @@ public class Agent extends Player{
     }*/
 
     private double aplhaBetaSearch(Board state) {
-        double v = maxValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        //TODO: planning on having the ai store it's next move here, it's a WIP
+        double v;
+        current_depth = 0;
+        v = maxValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
         return v;
     }
 
     double maxValue(Board state, double alpha, double beta) {
+        //TODO: have a function which calculates the score of the state
+        if(current_depth == MAX_DEPTH)
+            return 0;
+
+        //TODO: probably smart to make it return as the MAX_SCORE
         if (terminalTest(state))
             return 0;
 
@@ -55,8 +64,9 @@ public class Agent extends Player{
 
         for (int s = 0; s < successors.size(); s++) {
             value = Math.max(value, minValue(state, alpha, beta));
-            if (value >= beta)
+            if (value >= beta) {
                 return value;
+            }
             alpha = Math.max(alpha, value);
         }
 
@@ -64,6 +74,11 @@ public class Agent extends Player{
     }
 
     double minValue(Board state, double alpha, double beta) {
+        //TODO: have a function which calculates the score of the state
+        if(current_depth == MAX_DEPTH)
+            return 0;
+
+        //TODO: probably smart to make it return as the MAX_SCORE
         if (terminalTest(state))
             return 0;
 
@@ -72,8 +87,9 @@ public class Agent extends Player{
 
         for (int s = 0; s < successors.size(); s++) {
             value = Math.min(value, maxValue(state, alpha, beta));
-            if (value <= beta)
+            if (value <= beta) {
                 return value;
+            }
             alpha = Math.min(alpha, value);
         }
 
@@ -96,9 +112,7 @@ public class Agent extends Player{
     }
 
     ArrayList<Move> generateSuccessors(Board board){
-        char position_status = ' ';
         int i = 1;
-        Move m = new Move(this.getXPosition(), this.getYPosition());
         ArrayList<Move> successors = new ArrayList<Move>();
 
         while(this.getXPosition() + i < 7 || this.getXPosition() - i > 0 || this.getYPosition() + i < 7 || this.getXPosition() - i > 0){
