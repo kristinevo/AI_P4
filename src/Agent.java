@@ -51,8 +51,8 @@ public class Agent extends Player{
 
     double maxValue(Board state, double alpha, double beta) {
         //TODO: have a function which calculates the score of the state
-        if(current_depth == MAX_DEPTH || terminalTest(state))
-            return 0;
+        if(current_depth > MAX_DEPTH || terminalTest(state))
+            return -1;
 
         current_depth++;
         double value = NEGATIVE_INFINITY;
@@ -60,7 +60,10 @@ public class Agent extends Player{
 
         for (int s = 0; s < successors.size(); s++) {
             value = Math.max(value, minValue(state, alpha, beta));
-            if (value >= beta) {
+            if(value == -1){
+                return heuristic_function(state, successors.get(s));
+            }
+            else if (value >= beta) {
                 return value;
             }
             alpha = Math.max(alpha, value);
@@ -72,7 +75,7 @@ public class Agent extends Player{
     double minValue(Board state, double alpha, double beta) {
         //TODO: have a function which calculates the score of the state
         if(current_depth == MAX_DEPTH || terminalTest(state))
-            return 0;
+            return -1;
 
         current_depth++;
         double value = INFINITY;
@@ -80,7 +83,11 @@ public class Agent extends Player{
 
         for (int s = 0; s < successors.size(); s++) {
             value = Math.min(value, maxValue(state, alpha, beta));
-            if (value <= beta) {
+            if(value == -1){
+                return heuristic_function(state, successors.get(s));
+            }
+
+            else if (value <= beta) {
                 return value;
             }
             alpha = Math.min(alpha, value);
@@ -90,27 +97,34 @@ public class Agent extends Player{
     }
 
     double heuristic_function(Board board, Move move){
-        //TODO: pythagorean distance from center + (moves ai has - moves opponent has)
+        //pythagorean distance from center + (moves ai has - moves opponent has)
         double agent_distance = 0;
+
         //TODO: this is ugly. can do better.
         ArrayList<Move> agent_moves = generateSuccessors(board);
         ArrayList<Move> opponent_moves = generateSuccessors(board);
 
-        //distance: lower number, the better
-        //best case:
+        /*distance: lower number, the better
+        Scores based on location:
+        23.90 |23.29 |22.88 |22.68 |22.68 |22.88 |23.29 |23.90 |
+        23.29 |22.07 |21.47 |21.20 |21.20 |21.47 |22.07 |23.29 |
+        22.88 |21.47 |20.67 |20.31 |20.31 |20.67 |21.47 |22.88 |
+        22.68 |21.20 |20.31 |19.90 |19.90 |20.31 |21.20 |22.68 |
+        22.68 |21.20 |20.31 |19.90 |19.90 |20.31 |21.20 |22.68 |
+        22.88 |21.47 |20.67 |20.31 |20.31 |20.67 |21.47 |22.88 |
+        23.29 |22.07 |21.47 |21.20 |21.20 |21.47 |22.07 |23.29 |
+        23.90 |23.29 |22.88 |22.68 |22.68 |22.88 |23.29 |23.90 |
+         */
 
         agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 0, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 7, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 0, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 7, 2));
 
-        agent_distance /= 4;
-
         return agent_distance + (agent_moves.size() - opponent_moves.size());
     }
 
     boolean terminalTest(Board state) {
-
         if (    state.isValidMove(opponent, opponent.move_diagonal_down_left())  ||
                 state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
                 state.isValidMove(opponent, opponent.move_diagonal_up_left())    ||
