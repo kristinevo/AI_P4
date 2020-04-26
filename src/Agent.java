@@ -47,6 +47,7 @@ public class Agent extends Player{
         ArrayList<Move> successors = generateSuccessors(state);
         double v, best_v = infinity;
         double alpha = negativeInfinity;
+        current_depth++;
         for(Move i: successors) {
             v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
             if(v >= best_v){
