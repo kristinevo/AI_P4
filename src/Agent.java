@@ -92,38 +92,21 @@ public class Agent extends Player{
     double heuristic_function(Board board, Move move){
         //TODO: pythagorean distance from center + (moves ai has - moves opponent has)
         double agent_distance = 0;
-        Move agent_temp_pos = new Move(this.getXPosition(), this.getYPosition());
-        Move opponent_temp_pos = new Move(opponent.getXPosition(), opponent.getYPosition());
-        int agent_moves = 0;
-        int opponent_moves = 0;
+        //TODO: this is ugly. can do better.
+        ArrayList<Move> agent_moves = generateSuccessors(board);
+        ArrayList<Move> opponent_moves = generateSuccessors(board);
 
         //distance: lower number, the better
-        agent_distance += Math.abs(move.getY() - 0) / Math.abs(move.getX() - 0);
-        agent_distance += Math.abs(move.getY() - 0) / Math.abs(move.getX() - 7);
-        agent_distance += Math.abs(move.getY() - 7) / Math.abs(move.getX() - 0);
-        agent_distance += Math.abs(move.getY() - 7) / Math.abs(move.getX() - 7);
+        //best case:
+
+        agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 0, 2));
+        agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 7, 2));
+        agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 0, 2));
+        agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 7, 2));
+
         agent_distance /= 4;
 
-        //moves
-        /*if(board.isValidMove(this,  this.move_up()))
-            successors.add(this.move_up());
-        if(board.isValidMove(this,  this.move_down()))
-            successors.add(this.move_down());
-        if(board.isValidMove(this,  this.move_left()))
-            successors.add(this.move_left());
-        if(board.isValidMove(this,  this.move_right()))
-            successors.add(this.move_right());
-        if(board.isValidMove(this,  this.move_diagonal_up_left()))
-            successors.add(this.move_diagonal_up_left());
-        if(board.isValidMove(this,  this.move_diagonal_up_right()))
-            successors.add(this.move_diagonal_up_right());
-        if(board.isValidMove(this,  this.move_diagonal_down_right()))
-            successors.add(this.move_diagonal_down_right());
-        if(board.isValidMove(this,  this.move_diagonal_down_left()))
-            successors.add(this.move_diagonal_down_left());
-        */
-
-        return 0;
+        return agent_distance + (agent_moves.size() - opponent_moves.size());
     }
 
     boolean terminalTest(Board state) {
