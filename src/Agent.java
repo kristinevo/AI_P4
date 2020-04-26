@@ -83,111 +83,15 @@ public class Agent extends Player{
     boolean terminalTest(Board state) {
 
         //this section checks given that the opponent isn't against a vertical wall
-        if (opponent.getXPosition() > 0 && opponent.getXPosition() < 8) {
-
-            //no horizontal wall
-            if (opponent.getYPosition() > 0 && opponent.getYPosition() < 7) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_down_left()) ||
-                        state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
-                        state.isValidMove(opponent, opponent.move_diagonal_up_left()) ||
-                        state.isValidMove(opponent, opponent.move_diagonal_up_right()) ||
-                        state.isValidMove(opponent, opponent.move_down()) ||
-                        state.isValidMove(opponent, opponent.move_up()) ||
-                        state.isValidMove(opponent, opponent.move_left()) ||
-                        state.isValidMove(opponent, opponent.move_right())) {
-                    return false;
-                }
-            }
-
-            //wall beneath
-            else if (opponent.getYPosition() == 7) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_up_left()) ||
-                        state.isValidMove(opponent, opponent.move_diagonal_up_right()) ||
-                        state.isValidMove(opponent, opponent.move_up()) ||
-                        state.isValidMove(opponent, opponent.move_left()) ||
-                        state.isValidMove(opponent, opponent.move_right())) {
-                    return false;
-                }
-            }
-
-            //wall above
-            else if (opponent.getYPosition() == 0) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_down_left()) ||
-                        state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
-                        state.isValidMove(opponent, opponent.move_down()) ||
-                        state.isValidMove(opponent, opponent.move_left()) ||
-                        state.isValidMove(opponent, opponent.move_right())) {
-                    return false;
-                }
-            }
-        }
-
-        // up against a vertical wall to left
-        else if (opponent.getXPosition() == 0) {
-
-            //no horizontal wall
-            if (opponent.getYPosition() > 0 && opponent.getYPosition() < 8) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
-                        state.isValidMove(opponent, opponent.move_diagonal_up_right()) ||
-                        state.isValidMove(opponent, opponent.move_down()) ||
-                        state.isValidMove(opponent, opponent.move_up()) ||
-                        state.isValidMove(opponent, opponent.move_right())) {
-                    return false;
-                }
-            }
-
-            //wall beneath
-            else if (opponent.getYPosition() == 7) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_up_right()) ||
-                        state.isValidMove(opponent, opponent.move_up()) ||
-                        state.isValidMove(opponent, opponent.move_right())) {
-                    return false;
-                }
-            }
-
-            //wall above
-            else if (opponent.getYPosition() == 0) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
-                        state.isValidMove(opponent, opponent.move_down()) ||
-                        state.isValidMove(opponent, opponent.move_right())) {
-                    return false;
-                }
-            }
-        }
-
-        //wall to the right
-        if (opponent.getXPosition() == 7) {
-
-            //no horizontal wall
-            if (opponent.getYPosition() > 0 && opponent.getYPosition() < 8) {
-                if (
-                        state.isValidMove(opponent, opponent.move_diagonal_down_left()) ||
-                                state.isValidMove(opponent, opponent.move_diagonal_up_left()) ||
-                                state.isValidMove(opponent, opponent.move_down()) ||
-                                state.isValidMove(opponent, opponent.move_up()) ||
-                                state.isValidMove(opponent, opponent.move_left())) {
-                    return false;
-                }
-            }
-
-            //wall above
-            else if (opponent.getYPosition() == 7) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_down_left()) ||
-                        state.isValidMove(opponent, opponent.move_down()) ||
-                        state.isValidMove(opponent, opponent.move_left())) {
-                    return false;
-                }
-            }
-
-            //wall beneath
-            else if (opponent.getYPosition() == 0) {
-                if (state.isValidMove(opponent, opponent.move_diagonal_up_left()) ||
-                        state.isValidMove(opponent, opponent.move_up()) ||
-                        state.isValidMove(opponent, opponent.move_left())) {
-                    return false;
-                }
-            }
-        }
+        if (    state.isValidMove(opponent, opponent.move_diagonal_down_left())  ||
+                state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
+                state.isValidMove(opponent, opponent.move_diagonal_up_left())    ||
+                state.isValidMove(opponent, opponent.move_diagonal_up_right())   ||
+                state.isValidMove(opponent, opponent.move_down())                ||
+                state.isValidMove(opponent, opponent.move_up())                  ||
+                state.isValidMove(opponent, opponent.move_left())                ||
+                state.isValidMove(opponent, opponent.move_right())               )
+            return false;
         return true;
     }
 
@@ -216,7 +120,6 @@ public class Agent extends Player{
                 successors.add(this.move_diagonal_down_left());
             i++;
         }
-
 
         return successors;
     }
