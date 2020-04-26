@@ -26,35 +26,24 @@ public class Agent extends Player{
         MAX_DEPTH = 3;
     }
 
-    //Where Min-Max w/ alpha-beta pruning will be implemented
-   /* Move search(Board curState) {
-        Move move = new Move(5,5);
-        int xPos, yPos;
-        xPos = player.getXPosition();
-        yPos = player.getYPosition();
-
-        //Iterative Deepening
-        for (int depth = 1; depth < MAX_DEPTH; depth++) {
-
-
-
-        }
-        return move;
-    }*/
-
     private Move aplhaBetaSearch(Board state) {
-        //TODO: planning on having the ai store it's next move here, it's a WIP
         ArrayList<Move> successors = generateSuccessors(state);
         double v, best_v = infinity;
         double alpha = negativeInfinity;
         current_depth++;
+
+        //TODO: if there are no moves able to be generated, that's called game over
+
         for(Move i: successors) {
+
             v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
             if(v >= best_v){
                 ai_next_move = i;
             }
+
             alpha = Math.max(alpha, v);
         }
+
         return ai_next_move;
     }
 
@@ -106,9 +95,13 @@ public class Agent extends Player{
         return value;
     }
 
+    double heuristic_function(){
+        //TODO: pythagorean distance from center + (moves ai has - moves opponent has)
+        return 0;
+    }
+
     boolean terminalTest(Board state) {
 
-        //this section checks given that the opponent isn't against a vertical wall
         if (    state.isValidMove(opponent, opponent.move_diagonal_down_left())  ||
                 state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
                 state.isValidMove(opponent, opponent.move_diagonal_up_left())    ||
