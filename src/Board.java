@@ -26,10 +26,23 @@ public class Board {
                 {'-', '-', '-', '-', '-', '-', '-', '-'},
                 {'-', '-', '-', '-', '-', '-', '-', '-'},
                 {'-', '-', '-', '-', '-', '-', '-', 'O'}};
+
     }
 
     public char[][] getBoard(){ return board; }
 
+    boolean terminalTest(Player p) {
+        if (    this.isValidMove(p, p.move_diagonal_down_left())  ||
+                this.isValidMove(p, p.move_diagonal_down_right()) ||
+                this.isValidMove(p, p.move_diagonal_up_left())    ||
+                this.isValidMove(p, p.move_diagonal_up_right())   ||
+                this.isValidMove(p, p.move_down())                ||
+                this.isValidMove(p, p.move_up())                  ||
+                this.isValidMove(p, p.move_left())                ||
+                this.isValidMove(p, p.move_right())               )
+            return false;
+        return true;
+    }
 
     //update board based on player's new position
     public void updateBoard(Player player, Move move){

@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class Isolation{
@@ -35,7 +36,7 @@ public class Isolation{
             //the turn is a place holder for now
             ai = new Agent(1, player);
 
-            aiMove = ai.search(board);
+            //aiMove = ai.search(board);
             board.updateBoard(board.player1, aiMove);
             System.out.println(board);
             System.exit(0);
@@ -96,18 +97,61 @@ public class Isolation{
             }
         }
 
-        while(true){
-            if(player_turn){
+        Move player_move = new Move(0,0);
+        String play_again = "y";
 
+        while(play_again.equalsIgnoreCase("y")){
 
+            //PLAYER'S TURN
+            if(player_turn) {
+                String move_coordinate = "";
+                while (true) {
+
+                    if (!isolation.board.terminalTest(isolation.player)) {
+                        System.out.println("Where would you like to move?\nPlease follow an alpha-numeric format.");
+                        move_coordinate = user_Input.next();
+
+                        //Uses ascii values to make smoother transition to arr indices
+                        player_move.setX((int) move_coordinate.charAt(0) - 65);
+                        player_move.setY((int) move_coordinate.charAt(1) - 49);
+
+                        if (!isolation.board.isValidMove(isolation.player, player_move)) {
+                            System.out.println("That's an invalid input. [A-H][1-8]");
+                        } else {
+                            isolation.board.updateBoard(isolation.player, player_move);
+                            player_turn = false;
+                            break;
+                        }
+                    }
+
+                    else {
+                        while (!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
+                            System.out.println("YOU LOST. I'M SORRY. TRY AGAIN? (y/n)");
+                            play_again = user_Input.next();
+                            break;
+                        }
+                    }
+
+                }
             }
+
+
             else{
                 isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board);
 
+                if(isolation.aiMove.getX() == -1 && isolation.aiMove.getY() == -1){
+                    while(!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
+                        System.out.println("YOU'VE WON AGAINST OUR AI. CONGRATS! Would you like to play again? (y/n)");
+                        play_again = user_Input.next();
+                    }
+                }
+
+                else{
+                    isolation.board.updateBoard(isolation.ai, isolation.aiMove);
+                    player_turn = true;
+                }
             }
         }
-
-
     }
 }
 

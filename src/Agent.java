@@ -51,7 +51,7 @@ public class Agent extends Player{
 
     double maxValue(Board state, double alpha, double beta) {
         //TODO: have a function which calculates the score of the state
-        if(current_depth > MAX_DEPTH || terminalTest(state))
+        if(current_depth > MAX_DEPTH || state.terminalTest(opponent))
             return -1;
 
         current_depth++;
@@ -74,7 +74,7 @@ public class Agent extends Player{
 
     double minValue(Board state, double alpha, double beta) {
         //TODO: have a function which calculates the score of the state
-        if(current_depth == MAX_DEPTH || terminalTest(state))
+        if(current_depth == MAX_DEPTH || state.terminalTest(opponent))
             return -1;
 
         current_depth++;
@@ -124,18 +124,7 @@ public class Agent extends Player{
         return agent_distance + (agent_moves.size() - opponent_moves.size());
     }
 
-    boolean terminalTest(Board state) {
-        if (    state.isValidMove(opponent, opponent.move_diagonal_down_left())  ||
-                state.isValidMove(opponent, opponent.move_diagonal_down_right()) ||
-                state.isValidMove(opponent, opponent.move_diagonal_up_left())    ||
-                state.isValidMove(opponent, opponent.move_diagonal_up_right())   ||
-                state.isValidMove(opponent, opponent.move_down())                ||
-                state.isValidMove(opponent, opponent.move_up())                  ||
-                state.isValidMove(opponent, opponent.move_left())                ||
-                state.isValidMove(opponent, opponent.move_right())               )
-            return false;
-        return true;
-    }
+
 
     ArrayList<Move> generateSuccessors(Board board){
         int i = 1;
