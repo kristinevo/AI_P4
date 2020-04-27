@@ -102,6 +102,7 @@ public class Isolation{
 
         while(play_again.equalsIgnoreCase("y")){
 
+            //TODO: add moves to log
             //PLAYER'S TURN
             if(player_turn) {
                 String move_coordinate = "";
@@ -148,6 +149,7 @@ public class Isolation{
 
                 else{
                     isolation.board.updateBoard(isolation.ai, isolation.aiMove);
+                    System.out.println("The computer moved: " + (char)(isolation.aiMove.getX() + 65) + ((char)isolation.aiMove.getY() + 49));
                     player_turn = true;
                 }
             }

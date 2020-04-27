@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Board {
     /*
     Board initialization key:
@@ -10,6 +12,7 @@ public class Board {
 
     Player player1;
     Player player2;
+    ArrayList<String> log = new ArrayList<String>();
 
 
     public Board(Player one, Player two){
@@ -30,6 +33,10 @@ public class Board {
     }
 
     public char[][] getBoard(){ return board; }
+
+    public void addToLog(String move){
+        log.add(move);
+    }
 
     boolean terminalTest(Player p) {
         if (    this.isValidMove(p, p.move_diagonal_down_left())  ||
@@ -177,6 +184,8 @@ public class Board {
 
     //prints board
     public String toString(){
+
+        //TODO: format so that the log is printed
         String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8   Computer vs. Opponent";
         for(int i = 0; i < 8; i++){
             board += ("\n" + (char)(65 + i)) + " ";
