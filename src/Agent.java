@@ -38,11 +38,15 @@ public class Agent extends Player{
             return new Move(-1,-1);
         }
 
-        for(Move i: successors) {
+        Board temp;
 
-            v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        for (int s = 0; s < successors.size(); s++) {
+            //TODO: the player's are dependent on player choice
+            temp = state.copyBoard();
+            temp.updateBoard(this, successors.get(s));
+            v = minValue(temp, Integer.MAX_VALUE, Integer.MAX_VALUE);
             if(v >= best_v){
-                ai_next_move = i;
+                ai_next_move = successors.get(s);
             }
 
             alpha = Math.max(alpha, v);
@@ -59,11 +63,15 @@ public class Agent extends Player{
         current_depth++;
         double value = NEGATIVE_INFINITY;
         ArrayList<Move> successors = generateSuccessors(state);
+        Board temp;
 
         for (int s = 0; s < successors.size(); s++) {
-            value = Math.max(value, minValue(state, alpha, beta));
+            //TODO: the player's are dependent on player choice
+            temp = state.copyBoard();
+            temp.updateBoard(this, successors.get(s));
+            value = Math.max(value, minValue(temp, alpha, beta));
             if(value == -1){
-                return heuristic_function(state, successors.get(s));
+                return heuristic_function(temp, successors.get(s));
             }
             else if (value >= beta) {
                 return value;
@@ -82,11 +90,15 @@ public class Agent extends Player{
         current_depth++;
         double value = INFINITY;
         ArrayList<Move> successors = generateSuccessors(state);
+        Board temp;
 
         for (int s = 0; s < successors.size(); s++) {
-            value = Math.min(value, maxValue(state, alpha, beta));
+            //TODO: the player's are dependent on player choice
+            temp = state.copyBoard();
+            temp.updateBoard(this, successors.get(s));
+            value = Math.min(value, maxValue(temp, alpha, beta));
             if(value == -1){
-                return heuristic_function(state, successors.get(s));
+                return heuristic_function(temp, successors.get(s));
             }
 
             else if (value <= beta) {
@@ -131,54 +143,34 @@ public class Agent extends Player{
     ArrayList<Move> generateSuccessors(Board board){
         int i = 1;
         ArrayList<Move> successors = new ArrayList<Move>();
-        Move up = new Move(this.getXPosition(), this.getYPosition());
-        Move down = new Move(this.getXPosition(), this.getYPosition());
-        Move left = new Move(this.getXPosition(), this.getYPosition());
-        Move right = new Move(this.getXPosition(), this.getYPosition());
-        Move up_right = new Move(this.getXPosition(), this.getYPosition());
-        Move up_left = new Move(this.getXPosition(), this.getYPosition());
-        Move down_right = new Move(this.getXPosition(), this.getYPosition());
-        Move down_left = new Move(this.getXPosition(), this.getYPosition());
 
         while(true){
-            up.setX(up.getX() - i);
-            down.setX(up.getX() + i);
-            right.setY(right.getY() + i);
-            left.setY(left.getY() - i);
-            up_left.setX(up_left.getX() - i);
-            up_left.setY(up_left.getY() - i);
-            up_right.setX(up_right.getX() - i);
-            up_right.setY(up_right.getY() + i);
-            down_left.setX(down_left.getX() + i);
-            down_left.setY(down_left.getY() - i);
-            down_right.setX(down_right.getX() + i);
-            down_right.setY(down_left.getY() + i);
 
-            if(board.isValidMove(this, up))
-                successors.add(up);
+            if(board.isNotValidMove(this, new Move(this.getXPosition() - i, this.getYPosition())))
+                successors.add(new Move(this.getXPosition() - i, this.getYPosition()));
 
-            else if(board.isValidMove(this, down))
-                successors.add(down);
+            if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition())))
+                successors.add(new Move(this.getXPosition() + i, this.getYPosition()));
 
-            else if(board.isValidMove(this, left))
-                successors.add(left);
+            if(board.isNotValidMove(this, new Move(this.getXPosition(), this.getYPosition()- i)))
+                successors.add(new Move(this.getXPosition(), this.getYPosition()- i));
 
-            else if(board.isValidMove(this,  right))
-                successors.add(right);
+            if(board.isNotValidMove(this, new Move(this.getXPosition(),this.getYPosition() + i)))
+                successors.add(new Move(this.getXPosition(),this.getYPosition() + i));
 
-            else if(board.isValidMove(this, up_left))
-                successors.add(up_left);
+            if(board.isNotValidMove(this, new Move(this.getXPosition() - i, this.getYPosition() - i)))
+                successors.add(new Move(this.getXPosition() - i, this.getYPosition() - i));
 
-            else if(board.isValidMove(this,  up_right))
-                successors.add(up_right);
+            if(board.isNotValidMove(this,  new Move(this.getXPosition() - i, this.getYPosition() + i)))
+                successors.add(new Move(this.getXPosition() - i, this.getYPosition() + i));
 
-            else if(board.isValidMove(this, down_right))
-                successors.add(down_right);
+            if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition() + i)))
+                successors.add(new Move(this.getXPosition() + i, this.getYPosition() + i));
 
-            else if(board.isValidMove(this, down_left))
-                successors.add(down_left);
+            if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition() - i)))
+                successors.add(new Move(this.getXPosition() + i, this.getYPosition() - i));
 
-            else
+            if(i > 8)
                 break;
 
             i++;

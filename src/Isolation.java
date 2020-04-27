@@ -1,4 +1,3 @@
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class Isolation{
@@ -118,7 +117,7 @@ public class Isolation{
                         player_move.setX((int) move_coordinate.charAt(0) - 65);
                         player_move.setY((int) move_coordinate.charAt(1) - 49);
 
-                        if (isolation.board.isValidMove(isolation.player, player_move)) {
+                        if (isolation.board.isNotValidMove(isolation.player, player_move)) {
                             System.out.println("That's an invalid input. [A-H][1-8]");
                         } else {
                             isolation.board.updateBoard(isolation.player, player_move);
@@ -152,7 +151,8 @@ public class Isolation{
 
                 else{
                     isolation.board.updateBoard(isolation.ai, isolation.aiMove);
-                    System.out.println("The computer moved: " + (char)(isolation.aiMove.getX() + 65) + ((char)isolation.aiMove.getY() + 49));
+                    System.out.println("The computer moved: " + (char)(isolation.aiMove.getX() + 65) + (char)(isolation.aiMove.getY() + 49));
+                    System.out.println(isolation.board.toString());
                     player_turn = true;
                 }
             }
