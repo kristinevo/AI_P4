@@ -26,7 +26,7 @@ public class Agent extends Player{
         this.opponent = opponent;
     }
 
-    private Move aplhaBetaSearch(Board state) {
+    public Move aplhaBetaSearch(Board state) {
         ArrayList<Move> successors = generateSuccessors(state);
         double v, best_v = INFINITY;
         double alpha = NEGATIVE_INFINITY;

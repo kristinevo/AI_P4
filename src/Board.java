@@ -12,10 +12,10 @@ public class Board {
     Player player2;
 
 
-    public Board(){
+    public Board(Player one, Player two){
 
-        player1 = new Player(0,0);
-        player2 = new Player(7,7);
+        player1 = one;
+        player2 = two;
 
         board = new char[][]{
                 {'X', '-', '-', '-', '-', '-', '-', '-'},
@@ -28,9 +28,9 @@ public class Board {
                 {'-', '-', '-', '-', '-', '-', '-', 'O'}};
     }
 
-    public char[][] getBoard(){
-        return board;
-    }
+    public char[][] getBoard(){ return board; }
+
+
     //update board based on player's new position
     public void updateBoard(Player player, Move move){
         if(player == player1){

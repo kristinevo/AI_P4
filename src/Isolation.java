@@ -15,9 +15,6 @@ public class Isolation{
 
 
     Isolation() {
-        board = new Board();
-        timer = new Timer();
-        player = new Player();
     }
 
     /*
@@ -62,11 +59,56 @@ public class Isolation{
     public static void main(String args[]) {
         Isolation isolation = new Isolation();
 
-        try {
+        /*try {
             isolation.getAiMove();
         } catch(Exception e) {
             System.out.println(e.getMessage());
+        }*/
+
+        Scanner user_Input = new Scanner(System.in);
+        boolean player_turn;
+
+        System.out.println("Welcome! You will be playing Isolation against an AI.");
+
+        //INIT THE GAME
+        while(true){
+            System.out.println("Would you like to go first? (y/n)");
+            String user_player = user_Input.next();
+
+            if(user_player.equalsIgnoreCase("y")){
+                isolation.player = new Player(0,0);
+                isolation.ai = new Agent(2, isolation.player);
+                isolation.board = new Board(isolation.player, isolation.ai);
+                player_turn = true;
+                break;
+            }
+
+            else if(user_player.equalsIgnoreCase("n")){
+                isolation.player = new Player(7,7);
+                isolation.ai = new Agent(1, isolation.player);
+                isolation.board = new Board(isolation.ai, isolation.player);
+                player_turn = false;
+                break;
+            }
+
+            else{
+                System.out.println("That is an invalid choice.");
+            }
         }
+
+        while(true){
+            if(player_turn){
+
+
+            }
+            else{
+                isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board);
+
+            }
+        }
+
+
     }
+}
 
 }
