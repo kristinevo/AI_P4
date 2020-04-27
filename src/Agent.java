@@ -28,83 +28,99 @@ public class Agent extends Player{
         this.opponent = opponent;
     }
 
-    public Move aplhaBetaSearch(Board state) {
+    public Move aplhaBetaSearch(Board state, Move player_original_position) {
         ArrayList<Move> successors = generateSuccessors(state);
-        double v, best_v = INFINITY;
+        double v, best_v = NEGATIVE_INFINITY;
         double alpha = NEGATIVE_INFINITY;
-        current_depth++;
+        current_depth = 1;
 
         if(successors.isEmpty()){
             return new Move(-1,-1);
         }
 
-        Board temp;
 
         for (int s = 0; s < successors.size(); s++) {
             //TODO: the player's are dependent on player choice
-            temp = state.copyBoard();
-            temp.updateBoard(this, successors.get(s));
-            v = minValue(temp, Integer.MAX_VALUE, Integer.MAX_VALUE);
+            state.updateBoard(this, successors.get(s));
+            v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, successors.get(s));
+            if(v == -1){
+                current_depth = 1;
+                v = heuristic_function(state, successors.get(s));
+            }
+
             if(v >= best_v){
                 ai_next_move = successors.get(s);
             }
 
             alpha = Math.max(alpha, v);
+            state.undo_Move(this, player_original_position);
         }
 
         return ai_next_move;
     }
 
-    double maxValue(Board state, double alpha, double beta) {
+    double maxValue(Board state, double alpha, double beta, Move player_original_position) {
         //TODO: have a function which calculates the score of the state
-        if(current_depth > MAX_DEPTH || state.terminalTest(opponent))
+        if(current_depth > MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
+        }
 
         current_depth++;
-        double value = NEGATIVE_INFINITY;
+        double value = NEGATIVE_INFINITY, minVal = 0;
         ArrayList<Move> successors = generateSuccessors(state);
         Board temp;
 
         for (int s = 0; s < successors.size(); s++) {
             //TODO: the player's are dependent on player choice
-            temp = state.copyBoard();
-            temp.updateBoard(this, successors.get(s));
-            value = Math.max(value, minValue(temp, alpha, beta));
-            if(value == -1){
-                return heuristic_function(temp, successors.get(s));
+            state.updateBoard(this, successors.get(s));
+            minVal = minValue(state, alpha, beta, successors.get(s));
+            if(minVal == -1){
+                current_depth--;
+                state.undo_Move(this, player_original_position);
+                return heuristic_function(state, successors.get(s));
             }
-            else if (value >= beta) {
+
+            value = Math.max(value, minVal);
+
+            if (value >= beta) {
                 return value;
             }
+
             alpha = Math.max(alpha, value);
+            state.undo_Move(this, player_original_position);
         }
 
         return value;
     }
 
-    double minValue(Board state, double alpha, double beta) {
+    double minValue(Board state, double alpha, double beta, Move player_original_position) {
         //TODO: have a function which calculates the score of the state
-        if(current_depth == MAX_DEPTH || state.terminalTest(opponent))
+        if(current_depth == MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
+        }
+
 
         current_depth++;
-        double value = INFINITY;
+        double value = INFINITY, maxVal = 0;
         ArrayList<Move> successors = generateSuccessors(state);
-        Board temp;
 
         for (int s = 0; s < successors.size(); s++) {
             //TODO: the player's are dependent on player choice
-            temp = state.copyBoard();
-            temp.updateBoard(this, successors.get(s));
-            value = Math.min(value, maxValue(temp, alpha, beta));
-            if(value == -1){
-                return heuristic_function(temp, successors.get(s));
+            state.updateBoard(this, successors.get(s));
+            maxVal = maxValue(state, alpha, beta, player_original_position);
+            if(maxVal == -1){
+                current_depth--;
+                state.undo_Move(this, player_original_position);
+                return heuristic_function(state, successors.get(s));
             }
 
-            else if (value <= beta) {
+            value = Math.min(value, maxVal);
+
+            if (value <= beta) {
                 return value;
             }
             alpha = Math.min(alpha, value);
+            state.undo_Move(this, player_original_position);
         }
 
         return value;

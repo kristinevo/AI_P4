@@ -22,7 +22,7 @@ public class Isolation{
     a new move after 5 seconds but when implemented this is where a new move will come from.
     If there is no new move after x seconds, throw a Timeout exception.
      */
-    TimerTask task = new TimerTask() {
+    /*TimerTask task = new TimerTask() {
         public void run() {
 
             int test = 0;
@@ -53,10 +53,10 @@ public class Isolation{
         System.out.println(board);
         timer.schedule(task, 5*1000);  //This is where the 5 second timer is set
 
-    }
+    }*/
 
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Isolation isolation = new Isolation();
 
         /*try {
@@ -140,7 +140,7 @@ public class Isolation{
 
 
             else{
-                isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board);
+                isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board, new Move(isolation.ai.getXPosition(), isolation.ai.getYPosition()));
 
                 if(isolation.aiMove.getX() == -1 && isolation.aiMove.getY() == -1){
                     while(!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {

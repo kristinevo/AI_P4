@@ -34,9 +34,9 @@ public class Board {
 
     }
 
-    public Board copyBoard(){
-        Board copy =  new Board(player1, player2);
-        copy.board = board.clone();
+    public static Board copyBoard(Board b){
+        Board copy =  new Board(b.player1, b.player2);
+        copy.board = b.getBoard().clone();
         return copy;
     }
 
@@ -62,16 +62,31 @@ public class Board {
     //update board based on player's new position
     public void updateBoard(Player player, Move move){
         if(player == player1){
-            board[player1.getXPosition()][player1.getYPosition()] = '#';
+            this.getBoard()[player1.getXPosition()][player1.getYPosition()] = '#';
             player1.setXPosition(move.getX());
             player1.setYPosition(move.getY());
-            board[player1.getXPosition()][player1.getYPosition()] = 'X';
+            this.getBoard()[player1.getXPosition()][player1.getYPosition()] = 'X';
         }
         else{
-            board[player2.getXPosition()][player2.getYPosition()] = '#';
+            this.getBoard()[player2.getXPosition()][player2.getYPosition()] = '#';
             player2.setXPosition(move.getX());
             player2.setYPosition(move.getY());
-            board[player2.getXPosition()][player2.getYPosition()] = 'O';
+            this.getBoard()[player2.getXPosition()][player2.getYPosition()] = 'O';
+        }
+    }
+
+    public void undo_Move(Player player, Move move){
+        if(player == player1){
+            this.getBoard()[player1.getXPosition()][player1.getYPosition()] = '-';
+            player1.setXPosition(move.getX());
+            player1.setYPosition(move.getY());
+            this.getBoard()[player1.getXPosition()][player1.getYPosition()] = 'X';
+        }
+        else{
+            this.getBoard()[player2.getXPosition()][player2.getYPosition()] = '-';
+            player2.setXPosition(move.getX());
+            player2.setYPosition(move.getY());
+            this.getBoard()[player2.getXPosition()][player2.getYPosition()] = 'O';
         }
     }
 
