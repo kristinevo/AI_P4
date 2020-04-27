@@ -12,13 +12,15 @@ public class Board {
 
     Player player1;
     Player player2;
-    ArrayList<String> log = new ArrayList<String>();
+    ArrayList<String> log;
 
 
     public Board(Player one, Player two){
 
         player1 = one;
         player2 = two;
+
+        log = new ArrayList<String>();
 
         board = new char[][]{
                 {'X', '-', '-', '-', '-', '-', '-', '-'},
@@ -55,14 +57,14 @@ public class Board {
     public void updateBoard(Player player, Move move){
         if(player == player1){
             board[player1.getXPosition()][player1.getYPosition()] = '#';
-            player1.setXPosition(move.getX() - 1);
-            player1.setYPosition(move.getY() - 1);
+            player1.setXPosition(move.getX());
+            player1.setYPosition(move.getY());
             board[player1.getXPosition()][player1.getYPosition()] = 'X';
         }
         else{
             board[player2.getXPosition()][player2.getYPosition()] = '#';
-            player2.setXPosition(move.getX() - 1);
-            player2.setYPosition(move.getY() - 1);
+            player2.setXPosition(move.getX());
+            player2.setYPosition(move.getY());
             board[player2.getXPosition()][player2.getYPosition()] = 'O';
         }
     }

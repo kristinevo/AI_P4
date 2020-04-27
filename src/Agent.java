@@ -8,10 +8,12 @@ public class Agent extends Player{
     private int current_depth = 0;
 
     private Player opponent;
-    private Move ai_next_move = new Move(0,0);
+    private Move ai_next_move;
 
     Agent(int turn, Player opponent) {
         super();
+
+        ai_next_move = new Move(0,0);
 
         if(turn == 1) {
             this.setXPosition(0);

@@ -74,7 +74,7 @@ public class Isolation{
         //INIT THE GAME
         while(true){
             System.out.println("Would you like to go first? (y/n)");
-            String user_player = user_Input.next();
+            String user_player = user_Input.next();////////////////////////// Add validation
 
             if(user_player.equalsIgnoreCase("y")){
                 isolation.player = new Player(0,0);
@@ -97,6 +97,8 @@ public class Isolation{
             }
         }
 
+        System.out.println(isolation.board.toString());
+
         Move player_move = new Move(0,0);
         String play_again = "y";
 
@@ -108,7 +110,7 @@ public class Isolation{
                 String move_coordinate = "";
                 while (true) {
 
-                    if (!isolation.board.terminalTest(isolation.player)) {
+                    if (isolation.board.terminalTest(isolation.player)) {
                         System.out.println("Where would you like to move?\nPlease follow an alpha-numeric format.");
                         move_coordinate = user_Input.next();
 
@@ -116,10 +118,11 @@ public class Isolation{
                         player_move.setX((int) move_coordinate.charAt(0) - 65);
                         player_move.setY((int) move_coordinate.charAt(1) - 49);
 
-                        if (!isolation.board.isValidMove(isolation.player, player_move)) {
+                        if (isolation.board.isValidMove(isolation.player, player_move)) {
                             System.out.println("That's an invalid input. [A-H][1-8]");
                         } else {
                             isolation.board.updateBoard(isolation.player, player_move);
+                            System.out.println(isolation.board.toString());
                             player_turn = false;
                             break;
                         }
