@@ -104,11 +104,13 @@ public class Board {
 
     boolean canMoveVertically(Player player, Move move) {
 
-         if(player.getYPosition() == move.getY()){
+        if(player.getYPosition() == move.getY()){
 
             //up
             if(player.getXPosition() > move.getX()) {
-                for (int i = move.getX(); i >= player.getXPosition(); i--) {
+                for (int i = move.getX(); i <= player.getXPosition(); i++) {
+                    if(i == player.getYPosition())
+                        break;
                     if (board[i][player.getYPosition()] != '-')
                         return false;
                 }
@@ -116,7 +118,9 @@ public class Board {
 
             //down
             if(player.getXPosition() < move.getX()){
-                for(int i = player.getXPosition(); i <= move.getX(); i++){
+                for(int i = move.getX(); player.getXPosition() <= i ; --i){
+                    if(i == player.getXPosition())
+                        break;
                     if(board[i][player.getYPosition()] != '-')
                         return false;
                 }
@@ -129,64 +133,86 @@ public class Board {
         if(player.getXPosition() == move.getX()){
             //horizontal-left
             if(player.getYPosition() > move.getY()){
-                for(int i = player.getYPosition(); i >= move.getY(); i--){
-                    if(board[player.getYPosition()][i] != '-')
+                for(int i = move.getY(); i <= player.getYPosition(); i++){
+                    if(i == player.getYPosition())
+                        break;
+                    if(board[player.getXPosition()][i] != '-')
                         return false;
                 }
             }
 
             //horizontal-right
             if(player.getYPosition() < move.getY()) {
-                for(int i = player.getYPosition(); i <= move.getY(); i++){
-                    if(board[player.getYPosition()][i] != '-')
+                for(int i = move.getY(); i >= player.getYPosition(); i--){
+                    if(i == player.getYPosition())
+                        break;
+                    if(board[player.getXPosition()][i] != '-')
                         return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
-    //TODO: fucked up somewhere: off by one error
     boolean canMoveDiagonally(Player player, Move move) {
         //diagonal to right
         if(player.getYPosition() < move.getY()){
             //diagonal right-up
             if(player.getXPosition() > move.getX()){
-                for(int i = 0; i <= move.getX() || i <= move.getY(); i++){
-                    if(board[player.getXPosition() - i][player.getYPosition() + i] != '-')
-                        return false;
+
+                for (int i = 1; i <= move.getX() && i <= move.getY(); i++) {
+                    if(!((player.getXPosition() - 1) > 0) && !((player.getXPosition() + 1) < 7) && !((player.getYPosition() + 1) < 7) && !((player.getYPosition() - 1) > 0)) {
+                        if (board[player.getXPosition() - i][player.getYPosition() + i] != '-')
+                            return false;
+                    }
                 }
             }
-            //diagonal right-down
-            else{
-                for(int i = 0; i <= move.getX() || i <= move.getY(); i++){
-                    if(board[player.getXPosition() + i][player.getYPosition() + i] != '-')
-                        return false;
+        }
+        //diagonal right-down
+        else {
+            if ((player.getXPosition() - 1) > 0 && (player.getXPosition() + 1) < 7 && (player.getYPosition() + 1) < 7 && (player.getYPosition() - 1) > 0) {
+                for (int i = 1; i <= move.getX() && i <= move.getY(); i++) {
+                    if(!((player.getXPosition() - 1) > 0) && !((player.getXPosition() + 1) < 7) && !((player.getYPosition() + 1) < 7) && !((player.getYPosition() - 1) > 0)) {
+                        if (board[player.getXPosition() + i][player.getYPosition() + i] != '-')
+                            return false;
+                    }
                 }
             }
         }
         //diagonal to left
         if(player.getYPosition() > move.getY()){
             //diagonal left-up
-            if(player.getXPosition() < move.getX()){
-                for(int i = 0; i <= move.getX() || i <=  move.getX(); i++){
-                    if(board[player.getXPosition() - i][player.getYPosition() - i] != '-')
-                        return false;
+                if (player.getXPosition() < move.getX()) {
+                    for (int i = 1; i <= move.getX() && i <= move.getX(); i++) {
+                        if(!((player.getXPosition() - 1) > 0) && !((player.getXPosition() + 1) < 7) && !((player.getYPosition() + 1) < 7) && !((player.getYPosition() - 1) > 0)) {
+
+                            if (board[player.getXPosition() - i][player.getYPosition() - i] != '-')
+                            return false;
+                    }
                 }
             }
             //diagonal left-down
             else{
-                for(int i = 0; i <= move.getX() || i <= move.getX(); i++){
-                    if(board[player.getXPosition() + i][player.getYPosition() - i] != '-')
-                        return false;
+                    for (int i = 1; i <= move.getX() && i <= move.getX(); i++) {
+                        if(!((player.getXPosition() - 1) > 0) && !((player.getXPosition() + 1) < 7) && !((player.getYPosition() + 1) < 7) && !((player.getYPosition() - 1) > 0)) {
+                            if (board[player.getXPosition() + i][player.getYPosition() - i] != '-') {
+                            return false;
+                        }
+                    }
                 }
             }
         }
-        return false;
+        return true;
     }
 
     //legal move check
     public boolean isNotValidMove(Player player, Move move){
+
+
+        //check's user input
+        if(move.getX() < 0 || move.getX() > 7 || move.getY() < 0 || move.getY() > 7){
+            return false;
+        }
 
         if (!sharedCol(player, move) && !sharedRow(player, move)) {
             if (!sharedDiagonal(player, move)){
@@ -195,30 +221,26 @@ public class Board {
         }
 
 
-        //check's user input
-        if(move.getX() < 0 || move.getX() > 7 ||
-           move.getY() < 0 || move.getY() > 7){
-            return false;
-        }
-
         //is the desired position open?
         if(board[move.getX()][move.getY()] != '-')
             return false;
 
         //if moving vertical
-        if (sharedCol(player, move) && canMoveVertically(player, move))
-            return false;
+        if (sharedCol(player, move)){
+            if(!canMoveVertically(player, move))
+                return false;
+        }
 
         //if moving horizontal
-        if (sharedRow(player, move) && canMoveHorizontally(player, move))
-            return false;
+        if (sharedRow(player, move)) {
+            if (!canMoveHorizontally(player, move))
+                return false;
+        }
 
         //if moving diagonal
 
-        else{
-            if (canMoveDiagonally(player, move))
-                return false;
-        }
+        if (!canMoveDiagonally(player, move))
+            return false;
         return true;
     }
 

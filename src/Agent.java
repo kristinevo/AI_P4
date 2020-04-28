@@ -150,6 +150,7 @@ public class Agent extends Player{
         agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 7, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 0, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 7, 2));
+        agent_distance -= 50;
 
         return agent_distance + (agent_moves.size() - opponent_moves.size());
     }
@@ -161,32 +162,31 @@ public class Agent extends Player{
         ArrayList<Move> successors = new ArrayList<Move>();
 
         while(true){
-
+            //up
             if(board.isNotValidMove(this, new Move(this.getXPosition() - i, this.getYPosition())))
                 successors.add(new Move(this.getXPosition() - i, this.getYPosition()));
-
+            //down
             if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition())))
                 successors.add(new Move(this.getXPosition() + i, this.getYPosition()));
-
+            //left
             if(board.isNotValidMove(this, new Move(this.getXPosition(), this.getYPosition()- i)))
                 successors.add(new Move(this.getXPosition(), this.getYPosition()- i));
-
+            //right
             if(board.isNotValidMove(this, new Move(this.getXPosition(),this.getYPosition() + i)))
                 successors.add(new Move(this.getXPosition(),this.getYPosition() + i));
-
+            //left up
             if(board.isNotValidMove(this, new Move(this.getXPosition() - i, this.getYPosition() - i)))
                 successors.add(new Move(this.getXPosition() - i, this.getYPosition() - i));
-
+            //right up
             if(board.isNotValidMove(this,  new Move(this.getXPosition() - i, this.getYPosition() + i)))
                 successors.add(new Move(this.getXPosition() - i, this.getYPosition() + i));
-
+            //right down
             if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition() + i)))
                 successors.add(new Move(this.getXPosition() + i, this.getYPosition() + i));
-
+            //down left
             if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition() - i)))
                 successors.add(new Move(this.getXPosition() + i, this.getYPosition() - i));
-
-            if(i > 8)
+            if(i > 7)
                 break;
 
             i++;
