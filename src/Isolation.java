@@ -104,13 +104,16 @@ public class Isolation{
         while(play_again.equalsIgnoreCase("y")){
 
             //TODO: add moves to log
+            //TODO: computer doesn't recognize game over, the space heuristic should be heavier than the distance
+            //TODO: validation is wanky
             //PLAYER'S TURN
             if(player_turn) {
-                String move_coordinate = "";
+                String move_coordinate;
                 while (true) {
 
-                    if (isolation.board.terminalTest(isolation.player)) {
+                    if (!isolation.board.terminalTest(isolation.player)) {
                         System.out.println("Where would you like to move?\nPlease follow an alpha-numeric format.");
+                        move_coordinate = "";
                         move_coordinate = user_Input.next();
 
                         //Uses ascii values to make smoother transition to arr indices
@@ -128,7 +131,7 @@ public class Isolation{
                     }
 
                     else {
-                        while (!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
+                        while (!play_again.equalsIgnoreCase("y") || !play_again.equalsIgnoreCase("n")) {
                             System.out.println("YOU LOST. I'M SORRY. TRY AGAIN? (y/n)");
                             play_again = user_Input.next();
                             break;

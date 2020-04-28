@@ -146,6 +146,7 @@ public class Board {
         return false;
     }
 
+    //TODO: fucked up somewhere: off by one error
     boolean canMoveDiagonally(Player player, Move move) {
         //diagonal to right
         if(player.getYPosition() < move.getY()){
