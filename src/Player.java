@@ -11,9 +11,9 @@ public class Player {
         playerYPosition = yPosition;
     }
 
-    int getXPosition() {return playerXPosition;}
+    int getX() {return playerXPosition;}
 
-    int getYPosition() {return playerYPosition;}
+    int getY() {return playerYPosition;}
 
     void setXPosition(int playerXPosition) {
         this.playerXPosition = playerXPosition;
@@ -24,34 +24,34 @@ public class Player {
     }
 
     public Move move_diagonal_up_right(){
-        return new Move(this.getXPosition() + 1, this.getYPosition() - 1);
+        return new Move(this.getX() + 1, this.getY() - 1);
     }
 
     public Move move_diagonal_up_left(){
-        return new Move(this.getXPosition() - 1, this.getYPosition() - 1);
+        return new Move(this.getX() - 1, this.getY() - 1);
     }
 
     public Move move_diagonal_down_right(){
-        return new Move(this.getXPosition() + 1, this.getYPosition() + 1);
+        return new Move(this.getX() + 1, this.getY() + 1);
     }
 
     public Move move_diagonal_down_left(){
-        return new Move(this.getXPosition() - 1, this.getYPosition() + 1);
+        return new Move(this.getX() - 1, this.getY() + 1);
     }
 
     public Move move_up(){
-        return new Move(this.getXPosition() , this.getYPosition() - 1);
+        return new Move(this.getX() , this.getY() - 1);
     }
 
     public Move move_down(){
-        return new Move(this.getXPosition(), this.getYPosition() + 1);
+        return new Move(this.getX(), this.getY() + 1);
     }
 
     public Move move_left(){
-        return new Move(this.getXPosition() - 1, this.getYPosition());
+        return new Move(this.getX() - 1, this.getY());
     }
 
     public Move move_right(){
-        return new Move(this.getXPosition() + 1, this.getYPosition());
+        return new Move(this.getX() + 1, this.getY());
     }
 }

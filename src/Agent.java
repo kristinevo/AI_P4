@@ -43,6 +43,7 @@ public class Agent extends Player{
             //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
             v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, successors.get(s));
+            state.undo_Move(this, player_original_position);
             if(v == -1){
                 current_depth = 1;
                 v = heuristic_function(state, successors.get(s));
@@ -53,7 +54,6 @@ public class Agent extends Player{
             }
 
             alpha = Math.max(alpha, v);
-            state.undo_Move(this, player_original_position);
         }
 
         return ai_next_move;
@@ -74,9 +74,9 @@ public class Agent extends Player{
             //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
             minVal = minValue(state, alpha, beta, successors.get(s));
+            state.undo_Move(this, player_original_position);
             if(minVal == -1){
                 current_depth--;
-                state.undo_Move(this, player_original_position);
                 return heuristic_function(state, successors.get(s));
             }
 
@@ -87,7 +87,6 @@ public class Agent extends Player{
             }
 
             alpha = Math.max(alpha, value);
-            state.undo_Move(this, player_original_position);
         }
 
         return value;
@@ -108,9 +107,9 @@ public class Agent extends Player{
             //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
             maxVal = maxValue(state, alpha, beta, player_original_position);
+            state.undo_Move(this, player_original_position);
             if(maxVal == -1){
                 current_depth--;
-                state.undo_Move(this, player_original_position);
                 return heuristic_function(state, successors.get(s));
             }
 
@@ -120,7 +119,6 @@ public class Agent extends Player{
                 return value;
             }
             alpha = Math.min(alpha, value);
-            state.undo_Move(this, player_original_position);
         }
 
         return value;
@@ -150,7 +148,7 @@ public class Agent extends Player{
         agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 7, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 0, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 7, 2));
-        agent_distance -= 50;
+       // agent_distance -= 50;
 
         return agent_distance + (agent_moves.size() - opponent_moves.size());
     }
@@ -163,29 +161,29 @@ public class Agent extends Player{
 
         while(true){
             //up
-            if(board.isNotValidMove(this, new Move(this.getXPosition() - i, this.getYPosition())))
-                successors.add(new Move(this.getXPosition() - i, this.getYPosition()));
+            if(board.isValidMove(this, new Move(this.getX() - i, this.getY())))
+                successors.add(new Move(this.getX() - i, this.getY()));
             //down
-            if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition())))
-                successors.add(new Move(this.getXPosition() + i, this.getYPosition()));
+            if(board.isValidMove(this, new Move(this.getX() + i, this.getY())))
+                successors.add(new Move(this.getX() + i, this.getY()));
             //left
-            if(board.isNotValidMove(this, new Move(this.getXPosition(), this.getYPosition()- i)))
-                successors.add(new Move(this.getXPosition(), this.getYPosition()- i));
+            if(board.isValidMove(this, new Move(this.getX(), this.getY()- i)))
+                successors.add(new Move(this.getX(), this.getY()- i));
             //right
-            if(board.isNotValidMove(this, new Move(this.getXPosition(),this.getYPosition() + i)))
-                successors.add(new Move(this.getXPosition(),this.getYPosition() + i));
+            if(board.isValidMove(this, new Move(this.getX(),this.getY() + i)))
+                successors.add(new Move(this.getX(),this.getY() + i));
             //left up
-            if(board.isNotValidMove(this, new Move(this.getXPosition() - i, this.getYPosition() - i)))
-                successors.add(new Move(this.getXPosition() - i, this.getYPosition() - i));
+            if(board.isValidMove(this, new Move(this.getX() - i, this.getY() - i)))
+                successors.add(new Move(this.getX() - i, this.getY() - i));
             //right up
-            if(board.isNotValidMove(this,  new Move(this.getXPosition() - i, this.getYPosition() + i)))
-                successors.add(new Move(this.getXPosition() - i, this.getYPosition() + i));
+            if(board.isValidMove(this,  new Move(this.getX() - i, this.getY() + i)))
+                successors.add(new Move(this.getX() - i, this.getY() + i));
             //right down
-            if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition() + i)))
-                successors.add(new Move(this.getXPosition() + i, this.getYPosition() + i));
+            if(board.isValidMove(this, new Move(this.getX() + i, this.getY() + i)))
+                successors.add(new Move(this.getX() + i, this.getY() + i));
             //down left
-            if(board.isNotValidMove(this, new Move(this.getXPosition() + i, this.getYPosition() - i)))
-                successors.add(new Move(this.getXPosition() + i, this.getYPosition() - i));
+            if(board.isValidMove(this, new Move(this.getX() + i, this.getY() - i)))
+                successors.add(new Move(this.getX() + i, this.getY() - i));
             if(i > 7)
                 break;
 

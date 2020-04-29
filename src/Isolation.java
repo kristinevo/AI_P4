@@ -104,8 +104,10 @@ public class Isolation{
         while(play_again.equalsIgnoreCase("y")){
 
             //TODO: add moves to log
+            //TODO: add timer
             //TODO: computer doesn't recognize game over, the space heuristic should be heavier than the distance
-            //TODO: validation is wanky
+            //TODO: the agent doesn't know game over, it goes into forever loop
+            //TODO: Where is the random hash coming from
             //PLAYER'S TURN
             if(player_turn) {
                 String move_coordinate;
@@ -113,14 +115,13 @@ public class Isolation{
 
                     if (!isolation.board.terminalTest(isolation.player)) {
                         System.out.println("Where would you like to move?\nPlease follow an alpha-numeric format.");
-                        move_coordinate = "";
                         move_coordinate = user_Input.next();
 
                         //Uses ascii values to make smoother transition to arr indices
                         player_move.setX((int) move_coordinate.charAt(0) - 65);
                         player_move.setY((int) move_coordinate.charAt(1) - 49);
 
-                        if (!isolation.board.isNotValidMove(isolation.player, player_move)) {
+                        if (!isolation.board.isValidMove(isolation.player, player_move)) {
                             System.out.println("That's an invalid input. [A-H][1-8]");
                         } else {
                             isolation.board.updateBoard(isolation.player, player_move);
@@ -143,7 +144,7 @@ public class Isolation{
 
 
             else{
-                isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board, new Move(isolation.ai.getXPosition(), isolation.ai.getYPosition()));
+                isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board, new Move(isolation.ai.getX(), isolation.ai.getY()));
 
                 if(isolation.aiMove.getX() == -1 && isolation.aiMove.getY() == -1){
                     while(!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
