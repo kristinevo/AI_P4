@@ -232,7 +232,6 @@ public class Board {
     //prints board
     public String toString(){
 
-        //TODO: format so that the log is printed
         String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8   Computer vs. Opponent";
         for(int i = 0; i < 8; i++){
             board += ("\n" + (char)(65 + i)) + " ";

@@ -124,6 +124,7 @@ public class Isolation{
                         if (!isolation.board.isValidMove(isolation.player, player_move)) {
                             System.out.println("That's an invalid input. [A-H][1-8]");
                         } else {
+                            isolation.board.addToLog(move_coordinate);
                             isolation.board.updateBoard(isolation.player, player_move);
                             System.out.println(isolation.board.toString());
                             player_turn = false;
@@ -144,7 +145,8 @@ public class Isolation{
 
 
             else{
-                isolation.aiMove = isolation.ai.aplhaBetaSearch(isolation.board, new Move(isolation.ai.getX(), isolation.ai.getY()));
+                String move_coordinate = "";
+                isolation.aiMove = isolation.ai.alphaBetaSearch(isolation.board, new Move(isolation.ai.getX(), isolation.ai.getY()));
 
                 if(isolation.aiMove.getX() == -1 && isolation.aiMove.getY() == -1){
                     while(!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
@@ -157,6 +159,8 @@ public class Isolation{
 
                     isolation.board.updateBoard(isolation.ai, isolation.aiMove);
                     System.out.println("The computer moved: " + (char)(isolation.aiMove.getX() + 65) + (char)(isolation.aiMove.getY() + 49));
+                    move_coordinate += ((char)(isolation.aiMove.getX() + 65)) + "" + ((char)(isolation.aiMove.getY() + 49));
+                    isolation.board.addToLog(move_coordinate);
                     System.out.println(isolation.board.toString());
                     player_turn = true;
                 }

@@ -28,7 +28,7 @@ public class Agent extends Player{
         this.opponent = opponent;
     }
 
-    public Move aplhaBetaSearch(Board state, Move player_original_position) {
+    public Move alphaBetaSearch(Board state, Move player_original_position) {
         ArrayList<Move> successors = generateSuccessors(state);
         double v, best_v = NEGATIVE_INFINITY;
         double alpha = NEGATIVE_INFINITY;
@@ -38,11 +38,10 @@ public class Agent extends Player{
             return new Move(-1,-1);
         }
 
-
         for (int s = 0; s < successors.size(); s++) {
             //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
-            v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, successors.get(s));
+            v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, this.getLocation());
             state.undo_Move(this, player_original_position);
             if(v == -1){
                 current_depth = 1;
@@ -60,6 +59,7 @@ public class Agent extends Player{
     }
 
     double maxValue(Board state, double alpha, double beta, Move player_original_position) {
+
         //TODO: have a function which calculates the score of the state
         if(current_depth > MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
@@ -68,12 +68,11 @@ public class Agent extends Player{
         current_depth++;
         double value = NEGATIVE_INFINITY, minVal = 0;
         ArrayList<Move> successors = generateSuccessors(state);
-        Board temp;
 
         for (int s = 0; s < successors.size(); s++) {
             //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
-            minVal = minValue(state, alpha, beta, successors.get(s));
+            minVal = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, this.getLocation());
             state.undo_Move(this, player_original_position);
             if(minVal == -1){
                 current_depth--;
@@ -93,20 +92,21 @@ public class Agent extends Player{
     }
 
     double minValue(Board state, double alpha, double beta, Move player_original_position) {
+
         //TODO: have a function which calculates the score of the state
         if(current_depth == MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
         }
-
 
         current_depth++;
         double value = INFINITY, maxVal = 0;
         ArrayList<Move> successors = generateSuccessors(state);
 
         for (int s = 0; s < successors.size(); s++) {
+
             //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
-            maxVal = maxValue(state, alpha, beta, player_original_position);
+            maxVal = maxValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, this.getLocation());
             state.undo_Move(this, player_original_position);
             if(maxVal == -1){
                 current_depth--;
@@ -157,8 +157,8 @@ public class Agent extends Player{
 
     ArrayList<Move> generateSuccessors(Board board){
         int i = 1;
-        ArrayList<Move> successors = new ArrayList<Move>();
-
+        ArrayList<Move> successors = new ArrayList<>();
+        
         while(true){
             //up
             if(board.isValidMove(this, new Move(this.getX() - i, this.getY())))
@@ -168,10 +168,10 @@ public class Agent extends Player{
                 successors.add(new Move(this.getX() + i, this.getY()));
             //left
             if(board.isValidMove(this, new Move(this.getX(), this.getY()- i)))
-                successors.add(new Move(this.getX(), this.getY()- i));
+                successors.add(new Move(this.getX(), this.getY() - i));
             //right
             if(board.isValidMove(this, new Move(this.getX(),this.getY() + i)))
-                successors.add(new Move(this.getX(),this.getY() + i));
+                successors.add(new Move(this.getX(), this.getY() + i));
             //left up
             if(board.isValidMove(this, new Move(this.getX() - i, this.getY() - i)))
                 successors.add(new Move(this.getX() - i, this.getY() - i));

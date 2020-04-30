@@ -11,6 +11,10 @@ public class Player {
         playerYPosition = yPosition;
     }
 
+    Move getLocation(){
+        return new Move(this.getX(), this.getY());
+    }
+
     int getX() {return playerXPosition;}
 
     int getY() {return playerYPosition;}
