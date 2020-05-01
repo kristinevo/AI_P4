@@ -231,13 +231,25 @@ public class Board {
 
     //prints board
     public String toString(){
-
         String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8   Computer vs. Opponent";
-        for(int i = 0; i < 8; i++){
+        for(int i = 0; i < 15; i++){
+            if (i < 8)
             board += ("\n" + (char)(65 + i)) + " ";
             for(int j = 0; j < 8; j++){
+                if (i < 8)
                 board += ("| " + this.board[i][j] + " ");
             }
+            if (!log.isEmpty() && (i * 2) < log.size()) {
+                if (i > 7)
+                    board += ("\n               " +
+                            "                   ");
+
+                board += ("     " + log.get(i * 2));
+
+            if ((i * 2) + 1 < log.size())
+                board += ("           " + log.get((i*2) + 1));
+            }
+
         }
         return board;
     }
