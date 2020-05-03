@@ -4,12 +4,16 @@ public class Agent extends Player{
 
     final double INFINITY = Double.MAX_VALUE;
     final double NEGATIVE_INFINITY = Double.MIN_VALUE;
-    final private int MAX_DEPTH = 3;
+    final private int MAX_DEPTH = 10;
     private int current_depth = 0;
     private Player opponent;
     private Move ai_next_move;
-    private static volatile boolean dontStopMeNow = true;
 
+    /**
+     * Agent constructor
+     * @param turn
+     * @param opponent
+     */
     Agent(int turn, Player opponent) {
         super();
 
@@ -28,6 +32,11 @@ public class Agent extends Player{
         this.opponent = opponent;
     }
 
+    /**
+     * @param state
+     * @param player_original_position
+     * @return ai_next_move
+     */
     public Move alphaBetaSearch(Board state, Move player_original_position) {
         ArrayList<Move> successors = generateSuccessors(state);
         double v, best_v = NEGATIVE_INFINITY;
@@ -56,7 +65,15 @@ public class Agent extends Player{
         return ai_next_move;
     }
 
-    double maxValue(Board state, double alpha, double beta, Move player_original_position) {
+    /**
+     * Max value recursive call for alpha-beta search
+     * @param state
+     * @param alpha
+     * @param beta
+     * @param player_original_position
+     * @return value
+     */
+    private double maxValue(Board state, double alpha, double beta, Move player_original_position) {
 
         if(current_depth > MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
@@ -87,7 +104,15 @@ public class Agent extends Player{
         return value;
     }
 
-    double minValue(Board state, double alpha, double beta, Move player_original_position) {
+    /**
+     * Min value recursive call for alpha-beta search
+     * @param state
+     * @param alpha
+     * @param beta
+     * @param player_original_position
+     * @return value
+     */
+    private double minValue(Board state, double alpha, double beta, Move player_original_position) {
         if(current_depth == MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
         }
@@ -117,6 +142,12 @@ public class Agent extends Player{
         return value;
     }
 
+    /**
+     * Evaluates a position within a board state
+     * @param board
+     * @param move
+     * @return heuristic value
+     */
     double heuristic_function(Board board, Move move){
         //pythagorean distance from center + (moves ai has - moves opponent has)
         double agent_distance = 0;
@@ -144,7 +175,11 @@ public class Agent extends Player{
     }
 
 
-
+    /**
+     * Adds all possible moves to an array list given a board state
+     * @param board
+     * @return successors
+     */
     ArrayList<Move> generateSuccessors(Board board){
         int i = 1;
         ArrayList<Move> successors = new ArrayList<>();

@@ -11,12 +11,19 @@ public class Isolation implements Runnable {
     private static String play_again = "y";
     private static Scanner user_Input = new Scanner(System.in);
     private static boolean player_turn;
-    private static boolean finishedThread;
+    private static boolean finishedThread = false;
 
+    /**
+     * Sets time for player turns
+     * @param sleepInterval
+     */
     public void setTime(double sleepInterval) {
         time = sleepInterval;
     }
 
+    /**
+     * Runs a thread for timing player turns
+     */
     public void run() {
         try {
             Thread.sleep((long)time * 1000);
@@ -32,11 +39,14 @@ public class Isolation implements Runnable {
                 }
                 System.exit(0);
             }
-            else{ }
         }
     }
 
-    public int getPlayerMove(Thread t1) {
+    /**
+     * Prompts the user for their next move
+     * @param timerThread
+     */
+    public void getPlayerMove(Thread timerThread) {
         String move_coordinate;
         while (true) {
             if (!board.terminalTest(player)) {
@@ -51,7 +61,7 @@ public class Isolation implements Runnable {
                 } else {
                     player_turn = false;
                     finishedThread = true;
-                    t1.interrupt();
+                    timerThread.interrupt();
                     board.addToLog(move_coordinate);
                     board.updateBoard(player, player_move);
                     System.out.println(board.toString());
@@ -68,10 +78,13 @@ public class Isolation implements Runnable {
                 break;
             }
         }
-        return 0;
     }
 
-    public void getAiMove(Thread t1) {
+    /**
+     * Calls the alpha-beta search for the agent's next move
+     * @param timerThread
+     */
+    public void getAiMove(Thread timerThread) {
         String move_coordinate = "";
         aiMove = ai.alphaBetaSearch(board, new Move(ai.getX(), ai.getY()));
 
@@ -87,7 +100,7 @@ public class Isolation implements Runnable {
         } else {
             player_turn = true;
             finishedThread = true;
-            t1.interrupt();
+            timerThread.interrupt();
             board.updateBoard(ai, aiMove);
             System.out.println("The computer moved: " + (char) (aiMove.getX() + 65) + (char) (aiMove.getY() + 49));
             move_coordinate += ((char) (aiMove.getX() + 65)) + "" + ((char) (aiMove.getY() + 49));
@@ -96,6 +109,9 @@ public class Isolation implements Runnable {
         }
     }
 
+    /**
+     * Handles player turns
+     */
     public void getUserTurn(){
         while (true) {
             System.out.println("Would you like to go first? (y/n)");
@@ -119,7 +135,10 @@ public class Isolation implements Runnable {
         }
     }
 
-    public void getTimeInterval(){
+    /**
+     * Sets the turn time for the player and Agent alpha-beta search
+     */
+    public void setTimeInterval(){
         while (true) {
             try {
                 System.out.println("How many seconds would you like per interval?");
@@ -134,30 +153,31 @@ public class Isolation implements Runnable {
         }
     }
 
-    public void startGame(){
+    /**
+     * Starts the game and alternates player turns
+     */
+    public void startGame(Isolation iso){
         while (play_again.equalsIgnoreCase("y")) {
-            Thread t1 = new Thread();
+            Thread timerThread = new Thread(iso);
             finishedThread = false;
-            if (player_turn) {
-                t1.start();
-                getPlayerMove(t1);
 
+            if (player_turn) {
+                timerThread.start();
+                getPlayerMove(timerThread);
             } else {
-                t1.start();
-                getAiMove(t1);
+                timerThread.start();
+                getAiMove(timerThread);
             }
         }
     }
 
-
     public static void main(String[] args){
         Isolation iso = new Isolation();
-
         System.out.println("Welcome! You will be playing Isolation against an AI.");
         iso.getUserTurn();
-        iso.getTimeInterval();
+        iso.setTimeInterval();
         System.out.println(iso.board.toString());
-        iso.startGame();
+        iso.startGame(iso);
     }
 }
 

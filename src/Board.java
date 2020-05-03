@@ -15,6 +15,10 @@ public class Board {
     ArrayList<String> log;
 
 
+    /**
+     * @param one - player 1
+     * @param two - player 2
+     */
     public Board(Player one, Player two){
 
         player1 = one;
@@ -34,18 +38,35 @@ public class Board {
 
     }
 
+    /**
+     * Returns a copy of the board
+     * @param b
+     * @return copy
+     */
     public static Board copyBoard(Board b){
         Board copy =  new Board(b.player1, b.player2);
         copy.board = b.getBoard().clone();
         return copy;
     }
 
+    /**
+     * @return board
+     */
     public char[][] getBoard(){ return board; }
 
+    /**
+     * Adds a move to the log for printing player turns
+     * @param move
+     */
     public void addToLog(String move){
         log.add(move);
     }
 
+    /**
+     * This validates if the player's has open moves around it's position
+     * @param p
+     * @return boolean true
+     */
     boolean terminalTest(Player p) {
         if (    this.isValidMove(p, p.move_diagonal_down_left())  ||
                 this.isValidMove(p, p.move_diagonal_down_right()) ||
@@ -59,7 +80,13 @@ public class Board {
         return true;
     }
 
-    //update board based on player's new position
+
+    /**
+     * This updates the board based on player's new position
+     * @param player
+     * @param move
+     * #Desc
+     */
     public void updateBoard(Player player, Move move){
         if(player == player1){
             this.getBoard()[player1.getX()][player1.getY()] = '#';
@@ -75,6 +102,11 @@ public class Board {
         }
     }
 
+    /**
+     * Reverts a board state to its previous state given its previous move
+     * @param player
+     * @param move
+     */
     public void undo_Move(Player player, Move move){
         if(player == player1){
             this.getBoard()[player1.getX()][player1.getY()] = '-';
@@ -90,24 +122,55 @@ public class Board {
         }
     }
 
+    /**
+     * @param move
+     * @return true if a move is out of bounds
+     */
     boolean outOfBounds(Move move) {
         return (move.getX() < 0 || move.getX() > 7 || move.getY() < 0 || move.getY() > 7);
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player's position and a desired move share a diagonal
+     */
     boolean sharedDiagonal(Player player, Move move) {
         return Math.abs(move.getX() - player.getX()) == Math.abs(move.getY() - player.getY());
     }
 
+    /**
+     *
+     * @param player
+     * @param move
+     * @return true if a player's position and a desired move share a column
+     */
     boolean sharedCol(Player player, Move move){ return  player.getY() == move.getY(); }
 
+
+    /**
+     * @param player
+     * @param move
+     * @return true if a player's position and a desired move share a row
+     */
     boolean sharedRow(Player player, Move move) {
         return player.getX() == move.getX();
     }
 
+    /**
+     * @param x
+     * @param y
+     * @return true if a desired position is filled
+     */
     boolean isFilled(int x, int y) { return board[x][y] != '-'; }
 
    // boolean isAvailable(int x, int y) { return !isFilled(x, y); }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move north
+     */
     boolean canMoveNorth(Player player, Move move) {
             if (player.getX() > move.getX()) {
                 for (int i = move.getX(); i < player.getX(); i++) {
@@ -119,6 +182,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move south
+     */
     boolean canMoveSouth(Player player, Move move) {
         if (player.getX() < move.getX()) {
             for (int i = move.getX(); i > player.getX(); i--) {
@@ -130,6 +198,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move east
+     */
     boolean canMoveEast(Player player, Move move) {
         if (player.getY() < move.getY()) {
             for (int i = move.getY(); i > player.getY(); i--) {
@@ -141,6 +214,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move west
+     */
     boolean canMoveWest(Player player, Move move) {
         if (player.getY() > move.getY()) {
             for (int i = move.getY(); i < player.getY(); i++) {
@@ -152,6 +230,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move north east
+     */
     boolean canMoveNorthEast(Player player, Move move) {
         if (player.getY() < move.getY() && player.getX() > move.getX()) {
             for (int i = 0;( move.getX() + i < player.getX()) && (move.getY() - i > player.getY()); i++){
@@ -163,6 +246,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move north west
+     */
     boolean canMoveNorthWest(Player player, Move move) {
         if (player.getY() > move.getY() && player.getX() > move.getX()) {
             for (int i = 0; (move.getX() + i < player.getX()) && (move.getY() + i > player.getY()); i++) {
@@ -174,6 +262,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move south east
+     */
     boolean canMoveSouthEast(Player player, Move move) {
         if (player.getY() < move.getY() && player.getX() < move.getX()) {
             for (int i = 0; move.getX() - i > player.getX() && move.getY() - i > player.getY(); i++) {
@@ -185,6 +278,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move south west
+     */
     boolean canMoveSouthWest(Player player, Move move){
         if(player.getY() > move.getY() && player.getX() < move.getX()){
             for(int i = 0; move.getX() + i > player.getX() && move.getY() + i < player.getY(); i++){
@@ -196,7 +294,11 @@ public class Board {
         return false;
     }
 
-    //legal move check
+    /**
+     * @param player
+     * @param move
+     * @return true if a player can move to a desired position
+     */
     public boolean isValidMove(Player player, Move move){
 
         if(outOfBounds(move)){
@@ -229,7 +331,10 @@ public class Board {
         return true;
     }
 
-    //prints board
+    /**
+     * Prints the board
+     * @return board.toString()
+     */
     public String toString(){
         String p1, p2;
         if(player1.getAI()){
