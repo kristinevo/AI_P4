@@ -6,9 +6,9 @@ public class Agent extends Player{
     final double NEGATIVE_INFINITY = Double.MIN_VALUE;
     final private int MAX_DEPTH = 3;
     private int current_depth = 0;
-
     private Player opponent;
     private Move ai_next_move;
+    private static volatile boolean dontStopMeNow = true;
 
     Agent(int turn, Player opponent) {
         super();
@@ -24,7 +24,7 @@ public class Agent extends Player{
             this.setXPosition(7);
             this.setYPosition(7);
         }
-
+        this.ai = true;
         this.opponent = opponent;
     }
 
@@ -35,11 +35,10 @@ public class Agent extends Player{
         current_depth = 1;
 
         if(successors.isEmpty()){
-            return new Move(-1,-1);
+            ai_next_move = new Move(-1,-1);
         }
 
         for (int s = 0; s < successors.size(); s++) {
-            //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
             v = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, this.getLocation());
             state.undo_Move(this, player_original_position);
@@ -54,13 +53,11 @@ public class Agent extends Player{
 
             alpha = Math.max(alpha, v);
         }
-
         return ai_next_move;
     }
 
     double maxValue(Board state, double alpha, double beta, Move player_original_position) {
 
-        //TODO: have a function which calculates the score of the state
         if(current_depth > MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
         }
@@ -70,7 +67,6 @@ public class Agent extends Player{
         ArrayList<Move> successors = generateSuccessors(state);
 
         for (int s = 0; s < successors.size(); s++) {
-            //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
             minVal = minValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, this.getLocation());
             state.undo_Move(this, player_original_position);
@@ -92,8 +88,6 @@ public class Agent extends Player{
     }
 
     double minValue(Board state, double alpha, double beta, Move player_original_position) {
-
-        //TODO: have a function which calculates the score of the state
         if(current_depth == MAX_DEPTH || state.terminalTest(opponent)) {
             return -1;
         }
@@ -104,7 +98,6 @@ public class Agent extends Player{
 
         for (int s = 0; s < successors.size(); s++) {
 
-            //TODO: the player's are dependent on player choice
             state.updateBoard(this, successors.get(s));
             maxVal = maxValue(state, Integer.MAX_VALUE, Integer.MAX_VALUE, this.getLocation());
             state.undo_Move(this, player_original_position);
@@ -155,7 +148,7 @@ public class Agent extends Player{
     ArrayList<Move> generateSuccessors(Board board){
         int i = 1;
         ArrayList<Move> successors = new ArrayList<>();
-        
+
         while(true){
             //up
             if(board.isValidMove(this, new Move(this.getX() - i, this.getY())))

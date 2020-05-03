@@ -2,17 +2,31 @@ public class Player {
 
     private int playerXPosition;
     private int playerYPosition;
-
+    private double time;
+    protected boolean ai;
 
     Player(){}
 
-    Player(int xPosition, int yPosition) {
+    Player(int xPosition, int yPosition, boolean ai) {
         playerXPosition = xPosition;
         playerYPosition = yPosition;
+        this.ai = ai;
     }
 
     Move getLocation(){
         return new Move(this.getX(), this.getY());
+    }
+
+    public void setTime(double time) {
+        this.time = time;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
+    public boolean getAI(){
+        return ai;
     }
 
     int getX() {return playerXPosition;}

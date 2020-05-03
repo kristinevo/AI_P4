@@ -231,7 +231,16 @@ public class Board {
 
     //prints board
     public String toString(){
-        String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8   Computer vs. Opponent";
+        String p1, p2;
+        if(player1.getAI()){
+            p1 = "Computer";
+            p2 = "Opponent";
+        }
+        else{
+            p2 = "Computer";
+            p1 = "Opponent";
+        }
+        String board = "  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 "   + p1 + " vs. " + p2;
         for(int i = 0; i < 15; i++){
             if (i < 8)
             board += ("\n" + (char)(65 + i)) + " ";
