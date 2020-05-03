@@ -59,12 +59,6 @@ public class Isolation{
     public static void main(String[] args) {
         Isolation isolation = new Isolation();
 
-        /*try {
-            isolation.getAiMove();
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-        }*/
-
         Scanner user_Input = new Scanner(System.in);
         boolean player_turn;
 
@@ -73,7 +67,7 @@ public class Isolation{
         //INIT THE GAME
         while(true){
             System.out.println("Would you like to go first? (y/n)");
-            String user_player = user_Input.next();////////////////////////// Add validation
+            String user_player = user_Input.next();
 
             if(user_player.equalsIgnoreCase("y")){
                 isolation.player = new Player(0,0);
@@ -103,11 +97,9 @@ public class Isolation{
 
         while(play_again.equalsIgnoreCase("y")){
 
-            //TODO: add moves to log
             //TODO: add timer
             //TODO: computer doesn't recognize game over, the space heuristic should be heavier than the distance
             //TODO: the agent doesn't know game over, it goes into forever loop
-            //TODO: Where is the random hash coming from
             //PLAYER'S TURN
             if(player_turn) {
                 String move_coordinate;
@@ -117,19 +109,20 @@ public class Isolation{
                         System.out.println("Where would you like to move?\nPlease follow an alpha-numeric format.");
                         move_coordinate = user_Input.next();
 
-                        //Uses ascii values to make smoother transition to arr indices
-                        player_move.setX((int) move_coordinate.charAt(0) - 65);
-                        player_move.setY((int) move_coordinate.charAt(1) - 49);
-
-                        if (!isolation.board.isValidMove(isolation.player, player_move)) {
+                        if (move_coordinate.length() != 2 || !isolation.board.isValidMove(isolation.player, player_move)) {
                             System.out.println("That's an invalid input. [A-H][1-8]");
                         } else {
+                            //Uses ascii values to make smoother transition to arr indices
+                            player_move.setX((int) move_coordinate.charAt(0) - 65);
+                            player_move.setY((int) move_coordinate.charAt(1) - 49);
+
                             isolation.board.addToLog(move_coordinate);
                             isolation.board.updateBoard(isolation.player, player_move);
                             System.out.println(isolation.board.toString());
                             player_turn = false;
                             break;
                         }
+
                     }
 
                     else {
