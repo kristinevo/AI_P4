@@ -165,7 +165,7 @@ public class Board {
 
     boolean canMoveNorthWest(Player player, Move move) {
         if (player.getY() > move.getY() && player.getX() > move.getX()) {
-            for (int i = 0; move.getX() + i > player.getX() && move.getY() + i > player.getY(); i++) {
+            for (int i = 0; (move.getX() + i < player.getX()) && (move.getY() + i > player.getY()); i++) {
                 if (isFilled(move.getX() + i, move.getY() + i))
                     return false;
             }

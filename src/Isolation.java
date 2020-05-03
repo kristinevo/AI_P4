@@ -98,8 +98,6 @@ public class Isolation{
         while(play_again.equalsIgnoreCase("y")){
 
             //TODO: add timer
-            //TODO: computer doesn't recognize game over, the space heuristic should be heavier than the distance
-            //TODO: the agent doesn't know game over, it goes into forever loop
             //PLAYER'S TURN
             if(player_turn) {
                 String move_coordinate;
@@ -141,9 +139,13 @@ public class Isolation{
                 isolation.aiMove = isolation.ai.alphaBetaSearch(isolation.board, new Move(isolation.ai.getX(), isolation.ai.getY()));
 
                 if(isolation.aiMove.getX() == -1 && isolation.aiMove.getY() == -1){
-                    while(!play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
+                    while(true) {
                         System.out.println("YOU'VE WON AGAINST OUR AI. CONGRATS! Would you like to play again? (y/n)");
+                        play_again = "";
                         play_again = user_Input.next();
+                        if(play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")){
+                            break;
+                        }
                     }
                 }
 

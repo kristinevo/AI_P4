@@ -127,12 +127,10 @@ public class Agent extends Player{
     double heuristic_function(Board board, Move move){
         //pythagorean distance from center + (moves ai has - moves opponent has)
         double agent_distance = 0;
-
-        //TODO: this is ugly. can do better.
         ArrayList<Move> agent_moves = generateSuccessors(board);
         ArrayList<Move> opponent_moves = generateSuccessors(board);
 
-        /*distance: lower number, the better
+        /*distance: higher number, the better
         Scores based on location:
         23.90 |23.29 |22.88 |22.68 |22.68 |22.88 |23.29 |23.90 |
         23.29 |22.07 |21.47 |21.20 |21.20 |21.47 |22.07 |23.29 |
@@ -148,9 +146,8 @@ public class Agent extends Player{
         agent_distance += Math.sqrt(Math.pow(move.getY() - 0, 2) + Math.pow(move.getX() - 7, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 0, 2));
         agent_distance += Math.sqrt(Math.pow(move.getY() - 7, 2) + Math.pow(move.getX() - 7, 2));
-       // agent_distance -= 50;
 
-        return agent_distance + (agent_moves.size() - opponent_moves.size());
+        return agent_distance + (agent_moves.size() - opponent_moves.size()) * 2;
     }
 
 
