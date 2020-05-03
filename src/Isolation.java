@@ -57,45 +57,45 @@ public class Isolation{
 
 
     public static void main(String[] args) {
-        Isolation isolation = new Isolation();
-
-        Scanner user_Input = new Scanner(System.in);
-        boolean player_turn;
-
-        System.out.println("Welcome! You will be playing Isolation against an AI.");
-
-        //INIT THE GAME
-        while(true){
-            System.out.println("Would you like to go first? (y/n)");
-            String user_player = user_Input.next();
-
-            if(user_player.equalsIgnoreCase("y")){
-                isolation.player = new Player(0,0);
-                isolation.ai = new Agent(2, isolation.player);
-                isolation.board = new Board(isolation.player, isolation.ai);
-                player_turn = true;
-                break;
-            }
-
-            else if(user_player.equalsIgnoreCase("n")){
-                isolation.player = new Player(7,7);
-                isolation.ai = new Agent(1, isolation.player);
-                isolation.board = new Board(isolation.ai, isolation.player);
-                player_turn = false;
-                break;
-            }
-
-            else{
-                System.out.println("That is an invalid choice.");
-            }
-        }
-
-        System.out.println(isolation.board.toString());
-
-        Move player_move = new Move(0,0);
         String play_again = "y";
 
         while(play_again.equalsIgnoreCase("y")){
+            Isolation isolation = new Isolation();
+
+            Scanner user_Input = new Scanner(System.in);
+            boolean player_turn;
+
+            System.out.println("Welcome! You will be playing Isolation against an AI.");
+
+            //INIT THE GAME
+            while(true){
+                System.out.println("Would you like to go first? (y/n)");
+                String user_player = user_Input.next();
+
+                if(user_player.equalsIgnoreCase("y")){
+                    isolation.player = new Player(0,0);
+                    isolation.ai = new Agent(2, isolation.player);
+                    isolation.board = new Board(isolation.player, isolation.ai);
+                    player_turn = true;
+                    break;
+                }
+
+                else if(user_player.equalsIgnoreCase("n")){
+                    isolation.player = new Player(7,7);
+                    isolation.ai = new Agent(1, isolation.player);
+                    isolation.board = new Board(isolation.ai, isolation.player);
+                    player_turn = false;
+                    break;
+                }
+
+                else{
+                    System.out.println("That is an invalid choice.");
+                }
+            }
+
+            System.out.println(isolation.board.toString());
+
+            Move player_move = new Move(0,0);
 
             //TODO: add timer
             //PLAYER'S TURN
@@ -123,13 +123,15 @@ public class Isolation{
                     }
 
                     else {
-                        while (!play_again.equalsIgnoreCase("y") || !play_again.equalsIgnoreCase("n")) {
+                        while (true) {
                             System.out.println("YOU LOST. I'M SORRY. TRY AGAIN? (y/n)");
                             play_again = user_Input.next();
-                            break;
+                            if(play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")){
+                                break;
+                            }
                         }
+                        break;
                     }
-
                 }
             }
 
@@ -137,11 +139,9 @@ public class Isolation{
             else{
                 String move_coordinate = "";
                 isolation.aiMove = isolation.ai.alphaBetaSearch(isolation.board, new Move(isolation.ai.getX(), isolation.ai.getY()));
-
                 if(isolation.aiMove.getX() == -1 && isolation.aiMove.getY() == -1){
                     while(true) {
                         System.out.println("YOU'VE WON AGAINST OUR AI. CONGRATS! Would you like to play again? (y/n)");
-                        play_again = "";
                         play_again = user_Input.next();
                         if(play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")){
                             break;
@@ -150,7 +150,6 @@ public class Isolation{
                 }
 
                 else{
-
                     isolation.board.updateBoard(isolation.ai, isolation.aiMove);
                     System.out.println("The computer moved: " + (char)(isolation.aiMove.getX() + 65) + (char)(isolation.aiMove.getY() + 49));
                     move_coordinate += ((char)(isolation.aiMove.getX() + 65)) + "" + ((char)(isolation.aiMove.getY() + 49));
@@ -160,6 +159,7 @@ public class Isolation{
                 }
             }
         }
+        System.out.println("Thank you for playing!");
     }
 }
 
