@@ -1,36 +1,44 @@
 import java.util.*;
 
-public class Isolation implements Runnable{
+public class Isolation implements Runnable {
 
     private Board board;
     private Agent ai;
     private Move aiMove;
     private Player player;
-    private Move player_move = new Move(0,0);
+    private Move player_move = new Move(0, 0);
     private static double time;
     private static String play_again = "y";
     private static Scanner user_Input = new Scanner(System.in);
     private static boolean player_turn;
-    private static volatile boolean dontStopMeNow = true;
     private static boolean finishedThread;
-    Thread timer;
 
+    public void setTime(double sleepInterval) {
+        time = sleepInterval;
+    }
 
-    public void run(){
-        if (player_turn) {
-            this.getPlayerMove();
+    public void run() {
+        try {
+            Thread.sleep((long)time * 1000);
+            throw new InterruptedException();
 
-        } else {
-            this.getAiMove();
+        } catch (InterruptedException e) {
+            if(!finishedThread) {
+                System.out.print("This turn took long, ");
+                if (player_turn)
+                    System.out.println("you lose.");
+                else {
+                    System.out.println("you win by default.");
+                }
+                System.exit(0);
+            }
+            else{ }
         }
     }
 
-    public synchronized int getPlayerMove(){
+    public int getPlayerMove(Thread t1) {
         String move_coordinate;
         while (true) {
-            if(!dontStopMeNow){
-                return -1;
-            }
             if (!board.terminalTest(player)) {
                 System.out.println("Where would you like to move?\nPlease follow an alpha-numeric format.");
                 move_coordinate = user_Input.next();
@@ -41,23 +49,19 @@ public class Isolation implements Runnable{
                 if (move_coordinate.length() != 2 || !board.isValidMove(player, player_move)) {
                     System.out.println("That's an invalid input. [A-H][1-8]");
                 } else {
-                    if(!dontStopMeNow){
-                        return -1;
-                    }
+                    player_turn = false;
+                    finishedThread = true;
+                    t1.interrupt();
                     board.addToLog(move_coordinate);
                     board.updateBoard(player, player_move);
                     System.out.println(board.toString());
-                    player_turn = false;
-                    finishedThread = true;
-                    timer.interrupt();
                     break;
                 }
-            }
-            else {
+            } else {
                 while (true) {
                     System.out.println("YOU LOST. I'M SORRY. TRY AGAIN? (y/n)");
                     play_again = user_Input.next();
-                    if(play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")){
+                    if (play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
                         break;
                     }
                 }
@@ -65,109 +69,95 @@ public class Isolation implements Runnable{
             }
         }
         return 0;
-
     }
 
-    public synchronized void getAiMove(){
+    public void getAiMove(Thread t1) {
         String move_coordinate = "";
         aiMove = ai.alphaBetaSearch(board, new Move(ai.getX(), ai.getY()));
 
-        if(aiMove.getX() == -1 && aiMove.getY() == -1){
-            while(true) {
+
+        if (aiMove.getX() == -1 && aiMove.getY() == -1) {
+            while (true) {
                 System.out.println("YOU'VE WON AGAINST OUR AI. CONGRATS! Would you like to play again? (y/n)");
                 play_again = user_Input.next();
-                if(play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")){
+                if (play_again.equalsIgnoreCase("y") || play_again.equalsIgnoreCase("n")) {
                     break;
                 }
             }
-        }
-
-        else{
-            board.updateBoard(ai, aiMove);
-            System.out.println("The computer moved: " + (char)(aiMove.getX() + 65) + (char)(aiMove.getY() + 49));
-            move_coordinate += ((char)(aiMove.getX() + 65)) + "" + ((char)(aiMove.getY() + 49));
-            board.addToLog(move_coordinate);
-            System.out.println(board.toString());
+        } else {
             player_turn = true;
             finishedThread = true;
-            timer.interrupt();
+            t1.interrupt();
+            board.updateBoard(ai, aiMove);
+            System.out.println("The computer moved: " + (char) (aiMove.getX() + 65) + (char) (aiMove.getY() + 49));
+            move_coordinate += ((char) (aiMove.getX() + 65)) + "" + ((char) (aiMove.getY() + 49));
+            board.addToLog(move_coordinate);
+            System.out.println(board.toString());
         }
     }
 
-    public static void main(String[] args) {
-        Isolation iso = new Isolation();
-        System.out.println("Welcome! You will be playing Isolation against an AI.");
-
-        while(true){
+    public void getUserTurn(){
+        while (true) {
             System.out.println("Would you like to go first? (y/n)");
             String user_player = user_Input.next();
 
-            if(user_player.equalsIgnoreCase("y")){
-                iso.player = new Player(0,0, false);
-                iso.ai = new Agent(2, iso.player);
-                iso.board = new Board(iso.player, iso.ai);
+            if (user_player.equalsIgnoreCase("y")) {
+                player = new Player(0, 0, false);
+                ai = new Agent(2, player);
+                board = new Board(player, ai);
                 player_turn = true;
                 break;
-            }
-
-            else if(user_player.equalsIgnoreCase("n")){
-                iso.player = new Player(7,7,false);
-                iso.ai = new Agent(1, iso.player);
-                iso.board = new Board(iso.ai, iso.player);
+            } else if (user_player.equalsIgnoreCase("n")) {
+                player = new Player(7, 7, false);
+                ai = new Agent(1, player);
+                board = new Board(ai, player);
                 player_turn = false;
                 break;
-            }
-
-            else{
+            } else {
                 System.out.println("That is an invalid choice.");
             }
         }
+    }
 
-        while(true){
-            try{
+    public void getTimeInterval(){
+        while (true) {
+            try {
                 System.out.println("How many seconds would you like per interval?");
                 time = user_Input.nextDouble();
-                if(time >= 0){
-                    iso.ai.setTime(time);
+                if (time >= 0) {
+                    setTime(time);
                     break;
                 }
-            }catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.print("Not a valid value.");
             }
         }
+    }
 
-        System.out.println(iso.board.toString());
+    public void startGame(){
+        while (play_again.equalsIgnoreCase("y")) {
+            Thread t1 = new Thread();
+            finishedThread = false;
+            if (player_turn) {
+                t1.start();
+                getPlayerMove(t1);
 
-        while(play_again.equalsIgnoreCase("y")) {
-            Thread t1 = new Thread(iso);
-            Thread timer = new Thread();
-            t1.start();
-            /*try {
-                t1.join();
-            }catch(InterruptedException e){
-
-            }*/
-
-            try {
-                timer.sleep((long) time * 1000);
-                throw new InterruptedException();
-
-            } catch (InterruptedException e) {
-                if(finishedThread){
-                    finishedThread = false;
-                }
-                else {
-                    System.out.print("The turn took too long, ");
-                    if (player_turn) {
-                        System.out.println("you lose.");
-                    } else {
-                        System.out.println("you win by default.");
-                    }
-                    System.out.println("Thank you for playing!");
-                    System.exit(0);
-                }
+            } else {
+                t1.start();
+                getAiMove(t1);
             }
         }
+    }
+
+
+    public static void main(String[] args){
+        Isolation iso = new Isolation();
+
+        System.out.println("Welcome! You will be playing Isolation against an AI.");
+        iso.getUserTurn();
+        iso.getTimeInterval();
+        System.out.println(iso.board.toString());
+        iso.startGame();
     }
 }
 
