@@ -9,4 +9,4 @@ Private Github Repo
 https://github.com/kristinevo/AI_P4.git
 
 should run in terminal with:
-javac "\FilePath\"
+javac "\FilePath\Isolation.java"
